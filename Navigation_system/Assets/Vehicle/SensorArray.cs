@@ -2,15 +2,17 @@ using UnityEngine;
 
 namespace Vehicle
 {
+	/// <summary>
+	/// Пускает 3-5 лучей (Physics.Raycast).
+	/// Возвращает дистанции до препятствий. Если препятствия нет — возвращает MaxSensorDist.
+	/// </summary>
 	public class SensorArray : MonoBehaviour
 	{
-		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
         
 		}
 
-		// Update is called once per frame
 		void Update()
 		{
         
