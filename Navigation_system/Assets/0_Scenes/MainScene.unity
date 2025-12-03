@@ -256,6 +256,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &554825038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: Player/Move
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,6 +556,7 @@ GameObject:
   - component: {fileID: 2028371235}
   - component: {fileID: 2028371236}
   - component: {fileID: 2028371237}
+  - component: {fileID: 2028371238}
   m_Layer: 0
   m_Name: CarModel
   m_TagString: Untagged
@@ -604,6 +619,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c686d483f8d3e54f8aa874cdbaf6990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarMovementController
+  maxSpeed: 5
+  turnSpeed: 150
+  acceleration: 3
+--- !u!114 &2028371238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028371234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c0994a5dfbaa04a861dfe940e3e26d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Vehicle.Control.ManualInputDriver
+  moveInputRef: {fileID: 554825038}
 --- !u!1001 &6132736857332837496
 PrefabInstance:
   m_ObjectHideFlags: 0
