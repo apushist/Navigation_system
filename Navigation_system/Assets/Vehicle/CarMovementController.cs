@@ -42,8 +42,8 @@ namespace Vehicle
             // Steering
             if (Mathf.Abs(_currentSpeed) > 0.1f)
             {
-				// TODO: ??? Invert steering when moving backwards?
-				float speedFactor = _currentSpeed / maxSpeed;
+                // TODO: ??? Invert steering when moving backwards?
+                float speedFactor = 1f;//_currentSpeed / maxSpeed;
                 float turnAmount = steeringInput * turnSpeed * speedFactor * Time.deltaTime;
                 transform.Rotate(0, turnAmount, 0);
             }
