@@ -35,7 +35,7 @@ namespace Vehicle.Control
 			}
 		}
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			if (moveInputRef == null) 
 				return;
