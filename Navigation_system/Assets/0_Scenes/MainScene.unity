@@ -3670,6 +3670,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb182aec5125d247b243333155a6310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Vehicle.Control.AutonomousAgent
+  speedFisAsset: {fileID: 11400000, guid: 5c85daaf364fce94a852cd6be517ea31, type: 2}
+  turnFisAsset: {fileID: 11400000, guid: 4f17f6b7293ff914d9f9010fd12d5038, type: 2}
   sensors: {fileID: 2028371242}
   target: {fileID: 515692723}
   arriveRadius: 1

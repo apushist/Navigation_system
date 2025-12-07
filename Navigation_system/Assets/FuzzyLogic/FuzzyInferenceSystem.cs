@@ -53,13 +53,6 @@ namespace FuzzyLogic
                 return 0f;
             }
 
-            Debug.Log("\n\n========== FIS CALCULATION START ==========");
-            //Debug.Log("Inputs:");
-            //foreach (var inp in inputs)
-            //    Debug.Log($"  {inp.Key} = {inp.Value}");
-
-            Debug.Log("\n--- 1) FUZZIFICATION ---");
-
             var memberships = new Dictionary<string, Dictionary<string, float>>();
 
             foreach (var kv in InputVariables)
@@ -69,16 +62,9 @@ namespace FuzzyLogic
 
                 float inputVal = inputs.ContainsKey(varName) ? inputs[varName] : variable.Min;
 
-                Debug.Log($"\nVariable: {varName}, input = {inputVal}, {inputs.ContainsKey(varName)}");
-
                 var fuzz = variable.Fuzzify(inputVal);
                 memberships[varName] = fuzz;
-
-                //foreach (var set in fuzz)
-                //    Debug.Log($"    Set {set.Key}: μ = {set.Value:F3}");
             }
-
-            Debug.Log("\n--- 2) RULE EVALUATION ---");
 
             List<(FuzzyRule rule, float strength)> fired = new List<(FuzzyRule, float)>();
 
@@ -86,24 +72,14 @@ namespace FuzzyLogic
             {
                 float s = r.Evaluate(memberships);
 
-                string cond = string.Join(", ",
-                    r.Antecedents.Select(a => $"{a.VariableName} is {a.SetName}"));
-
-                if(s>0) Debug.Log($"Rule: IF {cond} THEN {r.ConsequentSetName}  => strength = {s:F3}");
-
                 if (s > 0f)
                     fired.Add((r, s));
             }
 
             if (fired.Count == 0)
             {
-                Debug.LogWarning("NO RULE FIRED! Returning default midpoint value.");
                 return (OutputVariable.Min + OutputVariable.Max) * 0.5f;
             }
-
-            Debug.Log($"\nTotal fired rules: {fired.Count}");
-
-            Debug.Log("\n--- 3) DEFUZZIFICATION (centroid) ---");
 
             float sumWeighted = 0f;
             float sumWeights = 0f;
@@ -135,17 +111,12 @@ namespace FuzzyLogic
 
             if (sumWeights <= 1e-6f)
             {
-                Debug.LogWarning("AGGREGATION ZERO — returning midpoint!");
                 return (OutputVariable.Min + OutputVariable.Max) * 0.5f;
             }
 
             float result = sumWeighted / sumWeights;
 
-            Debug.Log($"\n=== RESULT: {result:F3} ===");
-            Debug.Log("========== FIS CALCULATION END ==========\n\n");
-
             return result;
         }
-
     }
 }
