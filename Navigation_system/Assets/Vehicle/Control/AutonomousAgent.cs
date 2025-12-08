@@ -120,48 +120,47 @@ namespace Vehicle.Control
         /// <summary>
         /// Builds a runtime FuzzyInferenceSystem from a ScriptableObject asset.
         /// </summary>
-        private FuzzyInferenceSystem BuildFisFromAsset(FuzzyInferenceSystemSO asset)
-        {
-            if (asset == null)
-            {
-                Debug.LogError($"FuzzyInferenceSystem asset is not assigned on {gameObject.name}. AI will be disabled.", this);
-                return null;
-            }
+		private FuzzyInferenceSystem BuildFisFromAsset(FuzzyInferenceSystemSO asset)
+		{
+			if (asset == null) return null;
 
-            var fis = new FuzzyInferenceSystem();
+			var fis = new FuzzyInferenceSystem();
 
-            // Inputs
-            foreach (var varDef in asset.InputVariables)
-            {
-                var fv = new FuzzyVariable(varDef.Name, varDef.Min, varDef.Max);
-                foreach (var setDef in varDef.Sets)
-                {
-                    fv.AddSet(new FuzzySet(setDef.Name, setDef.Curve));
-                }
-                fis.AddInput(fv);
-            }
+			// Inputs
+			foreach (var varDef in asset.InputVariables)
+			{
+				var fv = new FuzzyVariable(varDef.Name, varDef.Min, varDef.Max);
+				foreach (var setDef in varDef.Sets)
+				{
+					fv.AddSet(new FuzzySet(setDef.Name, setDef.Curve));
+				}
+				fis.AddInput(fv);
+			}
 
-            // Output
-            var outDef = asset.OutputVariable;
-            var outFv = new FuzzyVariable(outDef.Name, outDef.Min, outDef.Max);
-            foreach (var setDef in outDef.Sets)
-            {
-                outFv.AddSet(new FuzzySet(setDef.Name, setDef.Curve));
-            }
-            fis.SetOutput(outFv);
+			// Output
+			var outDef = asset.OutputVariable;
+			var outFv = new FuzzyVariable(outDef.Name, outDef.Min, outDef.Max);
+			foreach (var setDef in outDef.Sets)
+			{
+				outFv.AddSet(new FuzzySet(setDef.Name, setDef.Curve));
+			}
+			fis.SetOutput(outFv);
 
-            // Rules
-            foreach (var ruleDef in asset.Rules)
-            {
-                var rule = new FuzzyRule(ruleDef.ConsequentSetName, ruleDef.Weight);
-                foreach (var ant in ruleDef.Antecedents)
-                {
-                    rule.AddAntecedent(ant.VariableName, ant.SetName);
-                }
-                fis.AddRule(rule);
-            }
+			foreach (var group in asset.RuleGroups)
+			{
+				foreach (var ruleDef in group.Rules)
+				{
+					var rule = new FuzzyRule(ruleDef.Name, ruleDef.ConsequentSetName, ruleDef.Weight);
+                    
+					foreach (var ant in ruleDef.Antecedents)
+					{
+						rule.AddAntecedent(ant.VariableName, ant.SetName);
+					}
+					fis.AddRule(rule);
+				}
+			}
 
-            return fis;
-        }
+			return fis;
+		}
     }
 }

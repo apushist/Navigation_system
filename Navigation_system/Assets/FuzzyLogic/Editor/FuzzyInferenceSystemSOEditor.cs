@@ -10,13 +10,13 @@ namespace FuzzyLogic.EditorCode
     {
         private SerializedProperty inputVariablesProp;
         private SerializedProperty outputVariableProp;
-        private SerializedProperty rulesProp;
+        private SerializedProperty ruleGroupsProp; 
 
         private void OnEnable()
         {
             inputVariablesProp = serializedObject.FindProperty("InputVariables");
             outputVariableProp = serializedObject.FindProperty("OutputVariable");
-            rulesProp = serializedObject.FindProperty("Rules");
+            ruleGroupsProp = serializedObject.FindProperty("RuleGroups"); 
         }
 
         public override void OnInspectorGUI()
@@ -32,101 +32,156 @@ namespace FuzzyLogic.EditorCode
             // --- OUTPUT VARIABLE ---
             EditorGUILayout.PropertyField(outputVariableProp, new GUIContent("Output Variable"), true);
 
-            // --- RULES ---
-            DrawRulesEditor();
+            // --- RULES GROUPS ---
+            DrawRuleGroupsEditor();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawRulesEditor()
+        private void DrawRuleGroupsEditor()
         {
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Rules", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Rule Groups", EditorStyles.boldLabel);
 
             FuzzyInferenceSystemSO system = (FuzzyInferenceSystemSO)target;
-
+            
             string[] inputVarNames = system.InputVariables.Select(v => v.Name).ToArray();
             string[] outputSetNames = system.OutputVariable.Sets.Select(s => s.Name).ToArray();
 
-            for (int i = 0; i < rulesProp.arraySize; i++)
+            for (int g = 0; g < ruleGroupsProp.arraySize; g++)
             {
-                SerializedProperty ruleProp = rulesProp.GetArrayElementAtIndex(i);
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                SerializedProperty groupProp = ruleGroupsProp.GetArrayElementAtIndex(g);
+                SerializedProperty groupNameProp = groupProp.FindPropertyRelative("GroupName");
+                SerializedProperty groupRulesProp = groupProp.FindPropertyRelative("Rules");
+
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox); /
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"Rule #{i + 1}", EditorStyles.boldLabel);
-                if (GUILayout.Button("Remove Rule", GUILayout.Width(100)))
+                EditorGUILayout.LabelField("Group:", GUILayout.Width(50));
+                EditorGUILayout.PropertyField(groupNameProp, GUIContent.none); 
+                if (GUILayout.Button("Remove Group", GUILayout.Width(100)))
                 {
-                    rulesProp.DeleteArrayElementAtIndex(i);
+                    ruleGroupsProp.DeleteArrayElementAtIndex(g);
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.EndVertical();
-                    continue;
+                    continue; 
                 }
                 EditorGUILayout.EndHorizontal();
 
-                // Consequent
-                SerializedProperty consequentProp = ruleProp.FindPropertyRelative("ConsequentSetName");
-                int currentConsequentIndex = System.Array.IndexOf(outputSetNames, consequentProp.stringValue);
-                int newConsequentIndex = EditorGUILayout.Popup("THEN Output is", currentConsequentIndex, outputSetNames);
-                if (newConsequentIndex >= 0 && newConsequentIndex < outputSetNames.Length)
-                {
-                    consequentProp.stringValue = outputSetNames[newConsequentIndex];
-                }
+                EditorGUILayout.Space(5);
 
-                // Weight
-                SerializedProperty weightProp = ruleProp.FindPropertyRelative("Weight");
-                EditorGUILayout.PropertyField(weightProp);
-                
-                // Antecedents
-                EditorGUILayout.LabelField("IF", EditorStyles.boldLabel);
-                SerializedProperty antecedentsProp = ruleProp.FindPropertyRelative("Antecedents");
-
-                for (int j = 0; j < antecedentsProp.arraySize; j++)
+                for (int i = 0; i < groupRulesProp.arraySize; i++)
                 {
-                    SerializedProperty antecedentProp = antecedentsProp.GetArrayElementAtIndex(j);
+                    SerializedProperty ruleProp = groupRulesProp.GetArrayElementAtIndex(i);
+					
                     EditorGUILayout.BeginHorizontal();
+                    GUILayout.Space(20); 
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox); 
 
-                    SerializedProperty varNameProp = antecedentProp.FindPropertyRelative("VariableName");
-                    SerializedProperty setNameProp = antecedentProp.FindPropertyRelative("SetName");
-
-                    int currentVarIndex = System.Array.IndexOf(inputVarNames, varNameProp.stringValue);
-                    int newVarIndex = EditorGUILayout.Popup(currentVarIndex, inputVarNames);
+                    EditorGUILayout.BeginHorizontal();
+					
+                    SerializedProperty ruleNameProp = ruleProp.FindPropertyRelative("Name");
+                    EditorGUILayout.LabelField("Rule Name:", GUILayout.Width(70));
+                    EditorGUILayout.PropertyField(ruleNameProp, GUIContent.none);
                     
-                    if (newVarIndex >= 0 && newVarIndex < inputVarNames.Length)
+                    if (GUILayout.Button("X", GUILayout.Width(25))) 
                     {
-                        varNameProp.stringValue = inputVarNames[newVarIndex];
-                        
-                        string[] currentSetNames = system.InputVariables[newVarIndex].Sets.Select(s => s.Name).ToArray();
-                        int currentSetIndex = System.Array.IndexOf(currentSetNames, setNameProp.stringValue);
-                        int newSetIndex = EditorGUILayout.Popup("is", currentSetIndex, currentSetNames);
-                        if (newSetIndex >= 0 && newSetIndex < currentSetNames.Length)
-                        {
-                            setNameProp.stringValue = currentSetNames[newSetIndex];
-                        }
-                    } else {
-                         EditorGUILayout.Popup("is", -1, new string[0]);
-                    }
-
-
-                    if (GUILayout.Button("-", GUILayout.Width(25)))
-                    {
-                        antecedentsProp.DeleteArrayElementAtIndex(j);
+                        groupRulesProp.DeleteArrayElementAtIndex(i);
+                        EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.EndVertical();
+                        EditorGUILayout.EndHorizontal();
+                        continue;
                     }
                     EditorGUILayout.EndHorizontal();
+
+                    // --- THEN (Consequent) ---
+                    SerializedProperty consequentProp = ruleProp.FindPropertyRelative("ConsequentSetName");
+                    int currentConsequentIndex = System.Array.IndexOf(outputSetNames, consequentProp.stringValue);
+                    
+                    int newConsequentIndex = EditorGUILayout.Popup("THEN Output is", currentConsequentIndex, outputSetNames);
+                    if (newConsequentIndex >= 0 && newConsequentIndex < outputSetNames.Length)
+                    {
+                        consequentProp.stringValue = outputSetNames[newConsequentIndex];
+                    }
+                    else if (outputSetNames.Length > 0 && currentConsequentIndex == -1)
+                    {
+                        consequentProp.stringValue = outputSetNames[0]; 
+                    }
+
+                    // --- Weight ---
+                    SerializedProperty weightProp = ruleProp.FindPropertyRelative("Weight");
+                    EditorGUILayout.PropertyField(weightProp);
+                    
+                    // --- IF (Antecedents) ---
+                    EditorGUILayout.LabelField("IF Conditions (AND):", EditorStyles.boldLabel);
+                    SerializedProperty antecedentsProp = ruleProp.FindPropertyRelative("Antecedents");
+
+                    for (int j = 0; j < antecedentsProp.arraySize; j++)
+                    {
+                        SerializedProperty antecedentProp = antecedentsProp.GetArrayElementAtIndex(j);
+                        EditorGUILayout.BeginHorizontal();
+
+                        SerializedProperty varNameProp = antecedentProp.FindPropertyRelative("VariableName");
+                        SerializedProperty setNameProp = antecedentProp.FindPropertyRelative("SetName");
+
+                        int currentVarIndex = System.Array.IndexOf(inputVarNames, varNameProp.stringValue);
+                        int newVarIndex = EditorGUILayout.Popup(currentVarIndex, inputVarNames, GUILayout.Width(100));
+                        
+                        if (newVarIndex >= 0 && newVarIndex < inputVarNames.Length)
+                        {
+                            varNameProp.stringValue = inputVarNames[newVarIndex];
+                            
+                            var variableDef = system.InputVariables[newVarIndex];
+                            string[] currentSetNames = variableDef.Sets.Select(s => s.Name).ToArray();
+                            
+                            int currentSetIndex = System.Array.IndexOf(currentSetNames, setNameProp.stringValue);
+                            
+                            EditorGUILayout.LabelField("is", GUILayout.Width(20));
+
+                            int newSetIndex = EditorGUILayout.Popup(currentSetIndex, currentSetNames);
+                            if (newSetIndex >= 0 && newSetIndex < currentSetNames.Length)
+                            {
+                                setNameProp.stringValue = currentSetNames[newSetIndex];
+                            }
+                        } 
+                        else 
+                        {
+                             EditorGUILayout.LabelField("Invalid Var");
+                        }
+
+                        if (GUILayout.Button("-", GUILayout.Width(25)))
+                        {
+                            antecedentsProp.DeleteArrayElementAtIndex(j);
+                        }
+                        EditorGUILayout.EndHorizontal();
+                    }
+
+                    if (GUILayout.Button("+ Condition"))
+                    {
+                        antecedentsProp.InsertArrayElementAtIndex(antecedentsProp.arraySize);
+                    }
+
+                    EditorGUILayout.EndVertical(); 
+                    EditorGUILayout.EndHorizontal(); 
+                    EditorGUILayout.Space(5);
                 }
 
-                if (GUILayout.Button("Add Condition (AND)"))
+                // Кнопка добавления правила ВНУТРИ группы
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(20);
+                if (GUILayout.Button("Add Rule to Group"))
                 {
-                    antecedentsProp.InsertArrayElementAtIndex(antecedentsProp.arraySize);
+                    groupRulesProp.InsertArrayElementAtIndex(groupRulesProp.arraySize);
                 }
+                EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.Space();
+                EditorGUILayout.EndVertical(); 
+                EditorGUILayout.Space(10);
             }
 
-            if (GUILayout.Button("Add New Rule"))
+            if (GUILayout.Button("Add New Rule Group", GUILayout.Height(30)))
             {
-                rulesProp.InsertArrayElementAtIndex(rulesProp.arraySize);
+                ruleGroupsProp.InsertArrayElementAtIndex(ruleGroupsProp.arraySize);
             }
         }
     }

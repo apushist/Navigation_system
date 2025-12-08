@@ -20,7 +20,7 @@ namespace LevelObjects
 
 		[Header("References")]
 		public GameObject obstaclePrefab;
-		public GameObject wallPrefab; // <-- НОВОЕ: Ссылка на префаб стены
+		public GameObject wallPrefab;
 		public Transform carTransform;
 		public Transform targetTransform;
 
@@ -28,7 +28,6 @@ namespace LevelObjects
 
 		private void Start()
 		{
-			//if (seed == 0) seed = Random.Range(0f, 10000f);
 			Generate();
 		}
 
@@ -61,7 +60,6 @@ namespace LevelObjects
 			{
 				for (int z = 0; z < gridHeight; z++)
 				{
-					// --- Проверка на границы (Стены) ---
 					bool isBorder = (x == 0 || x == gridWidth - 1 || z == 0 || z == gridHeight - 1);
 					
 					float xPos = x * xOffset;
@@ -97,14 +95,11 @@ namespace LevelObjects
 			}
 		}
 
-		// Метод изменен: теперь принимает prefab как аргумент
 		private void CreateHexPrism(Vector3 pos, GameObject prefab)
 		{
 			if (prefab == null) return;
 
 			GameObject newHexPrism = Instantiate(prefab, pos, Quaternion.identity);
-			// Если нужно сохранить размер гекса для стен, оставляем как есть. 
-			// Если у стен свой скейл внутри префаба, эту строку можно закомментировать для стен.
 			newHexPrism.transform.localScale = new Vector3(hexRadius, newHexPrism.transform.localScale.y, hexRadius);
 			
 			newHexPrism.transform.SetParent(this.transform);
@@ -125,7 +120,7 @@ namespace LevelObjects
 			if (carTransform)
 			{
 				if (carTransform.TryGetComponent<Rigidbody>(out var rb)) 
-					rb.linearVelocity = Vector3.zero; // Обратите внимание: в Unity 6 "velocity" заменен на "linearVelocity"
+					rb.linearVelocity = Vector3.zero; 
 			}
 		}
 
@@ -141,7 +136,6 @@ namespace LevelObjects
 			}
 			_spawnedHexes.Clear();
 
-			// Дополнительная очистка детей, если список рассинхронизировался
 			for (int i = transform.childCount - 1; i >= 0; i--)
 			{
 				Transform child = transform.GetChild(i);
