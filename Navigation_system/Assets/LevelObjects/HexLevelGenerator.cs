@@ -20,6 +20,7 @@ namespace LevelObjects
 
 		[Header("References")]
 		public GameObject obstaclePrefab;
+		public GameObject wallPrefab; // <-- НОВОЕ: Ссылка на префаб стены
 		public Transform carTransform;
 		public Transform targetTransform;
 
@@ -60,6 +61,9 @@ namespace LevelObjects
 			{
 				for (int z = 0; z < gridHeight; z++)
 				{
+					// --- Проверка на границы (Стены) ---
+					bool isBorder = (x == 0 || x == gridWidth - 1 || z == 0 || z == gridHeight - 1);
+					
 					float xPos = x * xOffset;
 					float zPos = z * zOffset;
 
@@ -70,24 +74,39 @@ namespace LevelObjects
 
 					Vector3 worldPos = startPos + new Vector3(xPos, 0, zPos);
 
-					
-					float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
-
-					if (noiseVal > (1f - fillThreshold))
+					if (isBorder)
 					{
-						if (!IsSafeZone(worldPos))
+						// Если это граница, спауним стену (используем wallPrefab, если он есть, иначе obstaclePrefab)
+						GameObject prefabToUse = wallPrefab != null ? wallPrefab : obstaclePrefab;
+						CreateHexPrism(worldPos, prefabToUse);
+					}
+					else
+					{
+						// Логика для внутренней части (препятствия)
+						float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
+
+						if (noiseVal > (1f - fillThreshold))
 						{
-							CreateHexPrism(worldPos);
+							if (!IsSafeZone(worldPos))
+							{
+								CreateHexPrism(worldPos, obstaclePrefab);
+							}
 						}
 					}
 				}
 			}
 		}
 
-		private void CreateHexPrism(Vector3 pos)
+		// Метод изменен: теперь принимает prefab как аргумент
+		private void CreateHexPrism(Vector3 pos, GameObject prefab)
 		{
-			GameObject newHexPrism = Instantiate(obstaclePrefab, pos, Quaternion.identity);
-			newHexPrism.transform.localScale = new Vector3(hexRadius, 1f, hexRadius);
+			if (prefab == null) return;
+
+			GameObject newHexPrism = Instantiate(prefab, pos, Quaternion.identity);
+			// Если нужно сохранить размер гекса для стен, оставляем как есть. 
+			// Если у стен свой скейл внутри префаба, эту строку можно закомментировать для стен.
+			newHexPrism.transform.localScale = new Vector3(hexRadius, newHexPrism.transform.localScale.y, hexRadius);
+			
 			newHexPrism.transform.SetParent(this.transform);
 			_spawnedHexes.Add(newHexPrism);
 		}
@@ -105,9 +124,8 @@ namespace LevelObjects
 		{
 			if (carTransform)
 			{
-				
 				if (carTransform.TryGetComponent<Rigidbody>(out var rb)) 
-					rb.linearVelocity = Vector3.zero;
+					rb.linearVelocity = Vector3.zero; // Обратите внимание: в Unity 6 "velocity" заменен на "linearVelocity"
 			}
 		}
 
@@ -123,10 +141,12 @@ namespace LevelObjects
 			}
 			_spawnedHexes.Clear();
 
-			for (int i = 0; i < transform.childCount; i++)
+			// Дополнительная очистка детей, если список рассинхронизировался
+			for (int i = transform.childCount - 1; i >= 0; i--)
 			{
 				Transform child = transform.GetChild(i);
-				DestroyImmediate(child.gameObject);
+				if (Application.isPlaying) Destroy(child.gameObject);
+				else DestroyImmediate(child.gameObject);
 			}
 		}
 	}
