@@ -24,11 +24,12 @@ namespace LevelObjects
 		public Transform carTransform;
 		public Transform targetTransform;
 
+		[SerializeField] // Чтобы Unity не теряла список при перезагрузках скриптов, но поле остается приватным
 		private List<GameObject> _spawnedHexes = new List<GameObject>();
 
 		private void Start()
 		{
-			Generate();
+			//Generate();
 		}
 
 		private void Update()
@@ -62,15 +63,7 @@ namespace LevelObjects
 				{
 					bool isBorder = (x == 0 || x == gridWidth - 1 || z == 0 || z == gridHeight - 1);
 					
-					float xPos = x * xOffset;
-					float zPos = z * zOffset;
-
-					if (z % 2 == 1)
-					{
-						xPos += xOffset / 2f;
-					}
-
-					Vector3 worldPos = startPos + new Vector3(xPos, 0, zPos);
+					Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
 
 					if (isBorder)
 					{
@@ -93,6 +86,19 @@ namespace LevelObjects
 					}
 				}
 			}
+		}
+
+		private Vector3 CalculateWorldPosition(int x, int z, Vector3 startPos, float xOffset, float zOffset)
+		{
+			float xPos = x * xOffset;
+			float zPos = z * zOffset;
+
+			if (z % 2 == 1)
+			{
+				xPos += xOffset / 2f;
+			}
+
+			return startPos + new Vector3(xPos, 0, zPos);
 		}
 
 		private void CreateHexPrism(Vector3 pos, GameObject prefab)
@@ -126,8 +132,10 @@ namespace LevelObjects
 
 		public void Clear()
 		{
-			foreach (var obj in _spawnedHexes)
+			// Удаляем объекты из списка _spawnedHexes
+			for (int i = _spawnedHexes.Count - 1; i >= 0; i--)
 			{
+				var obj = _spawnedHexes[i];
 				if (obj != null) 
 				{
 					if (Application.isPlaying) Destroy(obj);
@@ -136,12 +144,120 @@ namespace LevelObjects
 			}
 			_spawnedHexes.Clear();
 
+			// Удаляем оставшихся детей, если они есть (на всякий случай)
 			for (int i = transform.childCount - 1; i >= 0; i--)
 			{
 				Transform child = transform.GetChild(i);
 				if (Application.isPlaying) Destroy(child.gameObject);
 				else DestroyImmediate(child.gameObject);
 			}
+		}
+
+		// === Методы для Level Painter ===
+
+		public void TryPaintObstacle(Vector3 hitPoint)
+		{
+			Vector2Int gridPos = GetClosestGridCoordinate(hitPoint);
+			if (gridPos.x == -1) return; // Невалидная координата
+
+			// Проверка на границы (стены нельзя закрашивать или менять)
+			if (gridPos.x == 0 || gridPos.x == gridWidth - 1 || gridPos.y == 0 || gridPos.y == gridHeight - 1)
+				return;
+
+			// Получаем точную позицию центра гекса
+			float r = hexRadius;
+			float xOffset = Mathf.Sqrt(3) * r + gap;
+			float zOffset = 1.5f * r + gap;
+			float mapPixelWidth = gridWidth * xOffset;
+			float mapPixelHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapPixelWidth / 2f, 0, -mapPixelHeight / 2f);
+			
+			Vector3 targetPos = CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+
+			// Проверка на SafeZone
+			if (IsSafeZone(targetPos)) return;
+
+			// Проверка: занята ли клетка
+			if (IsOccupied(targetPos)) return;
+
+			// Создаем препятствие
+			CreateHexPrism(targetPos, obstaclePrefab);
+		}
+
+		public void TryEraseObstacle(Vector3 hitPoint)
+		{
+			Vector2Int gridPos = GetClosestGridCoordinate(hitPoint);
+			if (gridPos.x == -1) return;
+
+			// Нельзя стирать стены
+			if (gridPos.x == 0 || gridPos.x == gridWidth - 1 || gridPos.y == 0 || gridPos.y == gridHeight - 1)
+				return;
+			
+			float r = hexRadius;
+			float xOffset = Mathf.Sqrt(3) * r + gap;
+			float zOffset = 1.5f * r + gap;
+			float mapPixelWidth = gridWidth * xOffset;
+			float mapPixelHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapPixelWidth / 2f, 0, -mapPixelHeight / 2f);
+
+			Vector3 targetPos = CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+
+			GameObject objToRemove = GetObjectAt(targetPos);
+			if (objToRemove != null)
+			{
+				_spawnedHexes.Remove(objToRemove);
+				DestroyImmediate(objToRemove);
+			}
+		}
+
+		private Vector2Int GetClosestGridCoordinate(Vector3 hitPos)
+		{
+			float r = hexRadius;
+			float xOffset = Mathf.Sqrt(3) * r + gap;
+			float zOffset = 1.5f * r + gap;
+			float mapPixelWidth = gridWidth * xOffset;
+			float mapPixelHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapPixelWidth / 2f, 0, -mapPixelHeight / 2f);
+
+			float minInfoDist = float.MaxValue;
+			Vector2Int bestCoord = new Vector2Int(-1, -1);
+
+			// Перебираем все возможные координаты (для сетки 20х20 это быстро)
+			// Более оптимальный способ - математический расчет, но перебор надежнее для сохранения точности с Generate()
+			for (int x = 0; x < gridWidth; x++)
+			{
+				for (int z = 0; z < gridHeight; z++)
+				{
+					Vector3 hexPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
+					float d = Vector3.Distance(hitPos, hexPos);
+					if (d < hexRadius && d < minInfoDist)
+					{
+						minInfoDist = d;
+						bestCoord = new Vector2Int(x, z);
+					}
+				}
+			}
+			return bestCoord;
+		}
+
+		private bool IsOccupied(Vector3 pos)
+		{
+			return GetObjectAt(pos) != null;
+		}
+
+		private GameObject GetObjectAt(Vector3 pos)
+		{
+			// Ищем объект в списке _spawnedHexes, который находится близко к позиции
+			// Используем небольшой порог расстояния
+			foreach (var obj in _spawnedHexes)
+			{
+				if (obj == null) continue;
+				if (Vector3.Distance(obj.transform.position, pos) < 0.1f)
+				{
+					return obj;
+				}
+			}
+			return null;
 		}
 	}
 }
