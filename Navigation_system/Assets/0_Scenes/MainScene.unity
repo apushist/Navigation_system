@@ -15868,7 +15868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarMovementController
   maxSpeed: 5
-  turnSpeed: 150
+  turnSpeed: 200
   acceleration: 5
 --- !u!114 &2028371238
 MonoBehaviour:
@@ -15976,7 +15976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Vehicle.SensorArray
   sensorCount: 3
   maxSensorDist: 10
-  spreadAngle: 80
+  spreadAngle: 50
   sensorOriginOffset: {x: 0, y: 0.5, z: 0.5}
 --- !u!114 &2028371243
 MonoBehaviour:

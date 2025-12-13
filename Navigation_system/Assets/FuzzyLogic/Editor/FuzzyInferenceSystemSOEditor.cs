@@ -54,7 +54,7 @@ namespace FuzzyLogic.EditorCode
                 SerializedProperty groupNameProp = groupProp.FindPropertyRelative("GroupName");
                 SerializedProperty groupRulesProp = groupProp.FindPropertyRelative("Rules");
 
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox); /
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox); 
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Group:", GUILayout.Width(50));
