@@ -263,7 +263,7 @@ MonoBehaviour:
         m_RotationOrder: 4
   - Name: MinDist
     Min: 0
-    Max: 1
+    Max: 50
     Sets:
     - Name: VeryNear
       Curve:
@@ -476,7 +476,7 @@ MonoBehaviour:
   OutputVariable:
     Name: Speed
     Min: 0
-    Max: 1000
+    Max: 5
     Sets:
     - Name: Stop
       Curve:
@@ -748,16 +748,16 @@ MonoBehaviour:
       - VariableName: MinDist
         SetName: VeryNear
       ConsequentSetName: Slow
-      Weight: 0.9
+      Weight: 1
     - Name: 5
       Antecedents:
       - VariableName: MinDist
         SetName: Near
       ConsequentSetName: Slow
-      Weight: 0.9
+      Weight: 1
     - Name: 6
       Antecedents:
       - VariableName: MinDist
         SetName: Mid
       ConsequentSetName: Mid
-      Weight: 0.9
+      Weight: 1

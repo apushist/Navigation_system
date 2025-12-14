@@ -110,8 +110,26 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
+          time: 0.8
           value: 1
+          inSlope: 0
+          outSlope: -10.000004
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 0
+          inSlope: -10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -155,6 +173,49 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Name: Far
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: Infinity
+          outSlope: 0
+          tangentMode: 71
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.8
+          value: 0
+          inSlope: -0
+          outSlope: 10.000004
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 1
+          inSlope: 10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -261,8 +322,26 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
+          time: 0.8
           value: 1
+          inSlope: 0
+          outSlope: -10.000004
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 0
+          inSlope: -10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -315,9 +394,52 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+    - Name: Far
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: Infinity
+          outSlope: 0
+          tangentMode: 71
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.8
+          value: 0
+          inSlope: -0
+          outSlope: 10.000004
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 1
+          inSlope: 10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
   - Name: FrontDist
     Min: 0
-    Max: 5
+    Max: 10
     Sets:
     - Name: Near
       Curve:
@@ -376,7 +498,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.1
+          time: 0.2
           value: 0
           inSlope: 0
           outSlope: 0
@@ -393,6 +515,67 @@ MonoBehaviour:
           weightedMode: 0
           inWeight: 0
           outWeight: 0
+        - serializedVersion: 3
+          time: 0.8
+          value: 1
+          inSlope: 0
+          outSlope: -10.000004
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 0
+          inSlope: -10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Name: Far
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: Infinity
+          outSlope: 0
+          tangentMode: 71
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.8
+          value: 0
+          inSlope: -0
+          outSlope: 10.000004
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 1
+          inSlope: 10.000004
+          outSlope: Infinity
+          tangentMode: 101
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 1
@@ -415,13 +598,22 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0
           inSlope: 0
-          outSlope: 0
-          tangentMode: 0
+          outSlope: 10
+          tangentMode: 69
           weightedMode: 0
           inWeight: 0
           outWeight: 0
+        - serializedVersion: 3
+          time: 0.1
+          value: 1
+          inSlope: 10
+          outSlope: 0
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 0.14
           value: 1
@@ -667,13 +859,65 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1
+          time: 0.9
           value: 1
-          inSlope: 0
+          inSlope: -0
+          outSlope: -9.999998
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -9.999998
           outSlope: 0
-          tangentMode: 0
+          tangentMode: 69
           weightedMode: 0
           inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Name: Behind
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -10
+          outSlope: -10
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.1
+          value: 0
+          inSlope: -10
+          outSlope: 0
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9
+          value: 0
+          inSlope: -0
+          outSlope: 9.999998
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 9.999998
+          outSlope: 9.999998
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -782,7 +1026,16 @@ MonoBehaviour:
           value: 1
           inSlope: 0
           outSlope: 0
-          tangentMode: 0
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.1
+          value: 1
+          inSlope: -0
+          outSlope: 0
+          tangentMode: 5
           weightedMode: 0
           inWeight: 0
           outWeight: 0
@@ -848,11 +1101,20 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
+          time: 0.9
+          value: 1
+          inSlope: -0
+          outSlope: 0
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 0
+          inSlope: -0
           outSlope: 0
-          tangentMode: 0
+          tangentMode: 5
           weightedMode: 0
           inWeight: 0
           outWeight: 0
@@ -1076,30 +1338,66 @@ MonoBehaviour:
         SetName: VeryNear
       ConsequentSetName: HardRight
       Weight: 1
-  - GroupName: Navigation
-    Rules:
-    - Name: Seek Target Left
+    - Name: Avoid Right 4
       Antecedents:
-      - VariableName: Angle
-        SetName: HardLeft
+      - VariableName: RightDist
+        SetName: Near
+      - VariableName: FrontDist
+        SetName: NotNear
       - VariableName: LeftDist
         SetName: NotNear
       ConsequentSetName: HardLeft
-      Weight: 0.5
-    - Name: Seek Target Right
+      Weight: 1
+    - Name: Avoid Left 4
       Antecedents:
-      - VariableName: Angle
-        SetName: HardRight
+      - VariableName: LeftDist
+        SetName: Near
+      - VariableName: FrontDist
+        SetName: NotNear
       - VariableName: RightDist
         SetName: NotNear
       ConsequentSetName: HardRight
-      Weight: 0.5
+      Weight: 1
+    - Name: Avoid Right 5
+      Antecedents:
+      - VariableName: RightDist
+        SetName: Near
+      - VariableName: FrontDist
+        SetName: NotNear
+      - VariableName: LeftDist
+        SetName: Far
+      ConsequentSetName: Left
+      Weight: 1
+    - Name: Avoid Left 5
+      Antecedents:
+      - VariableName: LeftDist
+        SetName: Near
+      - VariableName: FrontDist
+        SetName: NotNear
+      - VariableName: RightDist
+        SetName: Far
+      ConsequentSetName: Right
+      Weight: 1
+    - Name: Avoid Front
+      Antecedents:
+      - VariableName: FrontDist
+        SetName: NotNear
+      ConsequentSetName: Right
+      Weight: 0
+    - Name: Avoid Front
+      Antecedents:
+      - VariableName: FrontDist
+        SetName: Near
+      ConsequentSetName: HardRight
+      Weight: 0
+  - GroupName: Navigation
+    Rules:
     - Name: Target Front
       Antecedents:
       - VariableName: Angle
         SetName: Front
       - VariableName: FrontDist
-        SetName: NotNear
+        SetName: Far
       ConsequentSetName: Front
       Weight: 0.5
     - Name: Target Right
@@ -1107,34 +1405,128 @@ MonoBehaviour:
       - VariableName: Angle
         SetName: Right
       - VariableName: RightDist
-        SetName: NotNear
+        SetName: Far
       ConsequentSetName: Right
-      Weight: 0.4
-    - Name: Target Right 2
-      Antecedents:
-      - VariableName: Angle
-        SetName: Right
-      - VariableName: TargetDist
-        SetName: Near
-      - VariableName: RightDist
-        SetName: NotNear
-      ConsequentSetName: HardRight
-      Weight: 0.5
+      Weight: 0.05
     - Name: Target Left
       Antecedents:
       - VariableName: Angle
         SetName: Left
       - VariableName: LeftDist
-        SetName: NotNear
+        SetName: Far
       ConsequentSetName: Left
-      Weight: 0.4
-    - Name: Target Left 2
+      Weight: 0.05
+    - Name: Target Right
+      Antecedents:
+      - VariableName: Angle
+        SetName: Left
+      - VariableName: RightDist
+        SetName: Far
+      ConsequentSetName: Front
+      Weight: 0.7
+    - Name: Target Left
+      Antecedents:
+      - VariableName: Angle
+        SetName: Right
+      - VariableName: LeftDist
+        SetName: Far
+      ConsequentSetName: Front
+      Weight: 0.7
+    - Name: Target Near Right
+      Antecedents:
+      - VariableName: Angle
+        SetName: Right
+      - VariableName: TargetDist
+        SetName: Near
+      ConsequentSetName: HardRight
+      Weight: 1
+    - Name: Target Near Left
       Antecedents:
       - VariableName: Angle
         SetName: Left
       - VariableName: TargetDist
         SetName: Near
+      ConsequentSetName: HardLeft
+      Weight: 1
+    - Name: Target Near Right
+      Antecedents:
+      - VariableName: Angle
+        SetName: HardRight
+      - VariableName: TargetDist
+        SetName: Near
+      ConsequentSetName: HardRight
+      Weight: 1
+    - Name: Target Near LEft
+      Antecedents:
+      - VariableName: Angle
+        SetName: HardLeft
+      - VariableName: TargetDist
+        SetName: Near
+      ConsequentSetName: HardLeft
+      Weight: 1
+  - GroupName: Graze
+    Rules:
+    - Name: Wall Left
+      Antecedents:
       - VariableName: LeftDist
         SetName: NotNear
-      ConsequentSetName: HardLeft
-      Weight: 0.5
+      - VariableName: Angle
+        SetName: Behind
+      ConsequentSetName: Left
+      Weight: 0.3
+    - Name: Wall Right
+      Antecedents:
+      - VariableName: RightDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: Behind
+      ConsequentSetName: Right
+      Weight: 0.3
+    - Name: Wall Left
+      Antecedents:
+      - VariableName: LeftDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: HardRight
+      ConsequentSetName: Left
+      Weight: 0.3
+    - Name: Wall Right
+      Antecedents:
+      - VariableName: RightDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: HardLeft
+      ConsequentSetName: Right
+      Weight: 0.3
+    - Name: Wall Left
+      Antecedents:
+      - VariableName: LeftDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: HardLeft
+      ConsequentSetName: Left
+      Weight: 0.3
+    - Name: Wall Right
+      Antecedents:
+      - VariableName: RightDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: HardRight
+      ConsequentSetName: Right
+      Weight: 0.3
+    - Name: Wall Left
+      Antecedents:
+      - VariableName: LeftDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: Left
+      ConsequentSetName: Left
+      Weight: 0.1
+    - Name: Wall Right
+      Antecedents:
+      - VariableName: RightDist
+        SetName: NotNear
+      - VariableName: Angle
+        SetName: Right
+      ConsequentSetName: Right
+      Weight: 0.1
