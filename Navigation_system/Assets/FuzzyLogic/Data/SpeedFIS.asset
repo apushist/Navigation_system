@@ -263,7 +263,7 @@ MonoBehaviour:
         m_RotationOrder: 4
   - Name: MinDist
     Min: 0
-    Max: 50
+    Max: 10
     Sets:
     - Name: VeryNear
       Curve:
@@ -271,15 +271,6 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 0.05
           value: 1
           inSlope: 0
           outSlope: 0
@@ -322,15 +313,6 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.05
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
           time: 0.1
           value: 1
           inSlope: 0
@@ -340,7 +322,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.15
+          time: 0.2
           value: 1
           inSlope: 0
           outSlope: 0
@@ -349,7 +331,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.2
+          time: 0.3
           value: 0
           inSlope: 0
           outSlope: 0
@@ -383,7 +365,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.15
+          time: 0.2
           value: 0
           inSlope: 0
           outSlope: 0
@@ -391,15 +373,6 @@ MonoBehaviour:
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.2
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
         - serializedVersion: 3
           time: 0.3
           value: 1
@@ -410,7 +383,16 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.4
+          time: 0.7
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.8
           value: 0
           inSlope: 0
           outSlope: 0
@@ -425,8 +407,8 @@ MonoBehaviour:
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
-          outWeight: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -444,7 +426,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.3
+          time: 0.7
           value: 0
           inSlope: 0
           outSlope: 0
@@ -453,14 +435,14 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.4
+          time: 0.8
           value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
-          outWeight: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 1
@@ -476,7 +458,7 @@ MonoBehaviour:
   OutputVariable:
     Name: Speed
     Min: 0
-    Max: 5
+    Max: 1
     Sets:
     - Name: Stop
       Curve:
@@ -760,4 +742,10 @@ MonoBehaviour:
       - VariableName: MinDist
         SetName: Mid
       ConsequentSetName: Mid
+      Weight: 1
+    - Name: 6
+      Antecedents:
+      - VariableName: MinDist
+        SetName: VeryNear
+      ConsequentSetName: Stop
       Weight: 1

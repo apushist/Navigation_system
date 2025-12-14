@@ -76,8 +76,19 @@ namespace Vehicle.Control
                 int mid = n / 2;
                 frontDist = dists[mid];
                 // leftmost and rightmost with bounds checking
-                rightDist = dists[n - 1];
-                leftDist = dists[0];
+				for (int i = 0; i < mid; i++)
+				{
+					if (dists[i] < leftDist) 
+						leftDist = dists[i];
+				}
+
+				for (int i = mid + 1; i < n; i++)
+				{
+					if (dists[i] < rightDist) 
+						rightDist = dists[i];
+				}
+                /*rightDist = dists[n - 1];
+                leftDist = dists[0];*/
             }
 
             // Speed input dictionary

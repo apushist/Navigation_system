@@ -32,7 +32,7 @@ namespace FuzzyLogic.Data
 		public string Name = "Rule Name"; 
 		public List<FuzzyAntecedentDef> Antecedents = new List<FuzzyAntecedentDef>();
 		public string ConsequentSetName;
-		[Range(0,1)] public float Weight = 1f;
+		[Range(0,2)] public float Weight = 1f;
 	}
 
 	// <--- Новый класс для группы
