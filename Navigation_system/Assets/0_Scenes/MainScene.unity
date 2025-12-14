@@ -16231,7 +16231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarMovementController
   maxSpeed: 5
-  turnSpeed: 150
+  turnSpeed: 220
   acceleration: 5
 --- !u!114 &2028371238
 MonoBehaviour:
