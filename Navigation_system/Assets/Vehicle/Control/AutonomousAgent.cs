@@ -83,8 +83,7 @@ namespace Vehicle.Control
             // Speed input dictionary
             var speedInputs = new Dictionary<string, float>()
             {
-                { "FrontDist", frontDist },
-                { "AngleAbs", Mathf.Abs(signedAngle) }, // 0..180
+                { "MinDist", Mathf.Min(frontDist, Mathf.Min(rightDist, leftDist)) },
                 { "TargetDist", distanceToTarget }
             };
 
@@ -97,8 +96,10 @@ namespace Vehicle.Control
                 { "LeftDist", leftDist },
                 { "RightDist", rightDist },
                 { "FrontDist", frontDist },
-                { "Angle", signedAngle } // -180..180
-            };
+                { "Angle", signedAngle }, // -180..180
+                { "TargetDist", distanceToTarget }
+
+			};
 
             float turnOut = turnFIS.Calculate(turnInputs); // expected -1..1 steering
             float steering = Mathf.Clamp(turnOut, -1f, 1f);
