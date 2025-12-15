@@ -1639,7 +1639,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: NotNear
       ConsequentSetName: HardRight
-      Weight: 1
+      Weight: 2
     - Name: Front Blocked
       Antecedents:
       - VariableName: LeftDist
@@ -1649,7 +1649,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: NotNear
       ConsequentSetName: Right
-      Weight: 1
+      Weight: 2
     - Name: Front Blocked
       Antecedents:
       - VariableName: LeftDist
@@ -1659,7 +1659,17 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: Near
       ConsequentSetName: HardLeft
-      Weight: 1
+      Weight: 2
+    - Name: Front Blocked
+      Antecedents:
+      - VariableName: LeftDist
+        SetName: NotNear
+      - VariableName: FrontDist
+        SetName: NotNear
+      - VariableName: RightDist
+        SetName: NotNear
+      ConsequentSetName: HardLeft
+      Weight: 2
   - GroupName: Navigation
     Rules:
     - Name: Target Front
