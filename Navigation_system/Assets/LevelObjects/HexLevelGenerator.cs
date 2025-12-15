@@ -68,7 +68,7 @@ namespace LevelObjects
 					if (isBorder)
 					{
 						// Если это граница, спауним стену (используем wallPrefab, если он есть, иначе obstaclePrefab)
-						GameObject prefabToUse = wallPrefab != null ? wallPrefab : obstaclePrefab;
+						GameObject prefabToUse = wallPrefab != null ? wallPrefab : GetRandomObstaclePrefab();
 						CreateHexPrism(worldPos, prefabToUse);
 					}
 					else
@@ -80,12 +80,13 @@ namespace LevelObjects
 						{
 							if (!IsSafeZone(worldPos))
 							{
-								CreateHexPrism(worldPos, obstaclePrefab);
+								CreateHexPrism(worldPos, GetRandomObstaclePrefab());
 							}
 						}
 					}
 				}
 			}
+			Combine();
 		}
 
 		private Vector3 CalculateWorldPosition(int x, int z, Vector3 startPos, float xOffset, float zOffset)
@@ -151,6 +152,9 @@ namespace LevelObjects
 				if (Application.isPlaying) Destroy(child.gameObject);
 				else DestroyImmediate(child.gameObject);
 			}
+
+			var m = GetComponent<MeshFilter>();
+            if (m) m.mesh = null;//очистка созданного меша
 		}
 
 		// === Методы для Level Painter ===
@@ -259,5 +263,69 @@ namespace LevelObjects
 			}
 			return null;
 		}
-	}
+
+
+
+
+        // === Weighted Obstacles System ===
+
+        [System.Serializable]
+        public class WeightedPrefab
+        {
+            public GameObject prefab;
+
+            [Range(0f, 1f)]
+            public float weight = 1f;
+        }
+
+        [Header("Obstacle Variants")]
+        [SerializeField]
+        private List<WeightedPrefab> obstaclePrefabs = new List<WeightedPrefab>();
+
+		[SerializeField] bool combineAfterGeneration = true;
+
+        private GameObject GetRandomObstaclePrefab()
+        {
+            // Если список пуст — используем старый obstaclePrefab
+            if (obstaclePrefabs == null || obstaclePrefabs.Count == 0)
+                return obstaclePrefab;
+
+            float totalWeight = 0f;
+
+            for (int i = 0; i < obstaclePrefabs.Count; i++)
+            {
+                if (obstaclePrefabs[i].prefab != null && obstaclePrefabs[i].weight > 0f)
+                    totalWeight += obstaclePrefabs[i].weight;
+            }
+
+            // Если все веса нулевые или префабы отсутствуют
+            if (totalWeight <= 0f)
+                return obstaclePrefab;
+
+            float rnd = Random.value * totalWeight;
+            float cumulative = 0f;
+
+            for (int i = 0; i < obstaclePrefabs.Count; i++)
+            {
+                var entry = obstaclePrefabs[i];
+                if (entry.prefab == null || entry.weight <= 0f)
+                    continue;
+
+                cumulative += entry.weight;
+                if (rnd <= cumulative)
+                    return entry.prefab;
+            }
+
+            // Фолбэк (на всякий случай)
+            return obstaclePrefab;
+        }
+
+		private void Combine()
+		{
+			if (!combineAfterGeneration) return;
+			MeshCombiner combiner = GetComponent<MeshCombiner>();
+			if (!combiner) return;
+			combiner.CombineMeshes(true);
+		}
+    }
 }
