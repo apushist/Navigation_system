@@ -50,13 +50,6 @@ namespace Vehicle.Control
 
         void FixedUpdate()
         {
-            if (target == null || speedFIS == null || turnFIS == null)
-            {
-                if(target == null) Debug.LogError("Missing target object");
-                _motor.HardStop();
-                return;
-            }
-
             float[] dists = sensors.GetDistances();
             float maxSensor = sensors.MaxSensorDist();
 
