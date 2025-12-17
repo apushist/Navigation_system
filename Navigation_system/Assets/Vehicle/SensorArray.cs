@@ -3,31 +3,36 @@ using UnityEngine;
 namespace Vehicle
 {
     /// <summary>
-    /// Пускает 3-5 лучей (Physics.Raycast).
-    /// Возвращает дистанции до препятствий. Если препятствия нет — возвращает MaxSensorDist.
+    /// Пускает веер лучей вперед и один луч назад.
     /// </summary>
     public class SensorArray : MonoBehaviour
     {
-        [Header("Sensor Settings")]
+        [Header("Front Sensors Settings")]
         [Range(3, 10)]
         [SerializeField] private int sensorCount = 5;
 
-        [Tooltip("Максимальная дистанция сенсоров (если нет препятствий — вернётся это значение)")]
+        [Tooltip("Максимальная дистанция сенсоров")]
         [SerializeField] private float maxSensorDist = 10f;
 
-        [Tooltip("Общий угол веера датчиков")]
+        [Tooltip("Общий угол веера передних датчиков")]
         [SerializeField] private float spreadAngle = 60f;
 
-        [Tooltip("Смещение точки запуска лучей от центра объекта")]
+        [Tooltip("Смещение точки запуска передних лучей")]
         [SerializeField] private Vector3 sensorOriginOffset = new Vector3(0, 0.5f, 0.5f);
 
-        private float[] _distances;
+        [Header("Rear Sensor Settings")]
+        [Tooltip("Смещение точки запуска заднего луча")]
+        [SerializeField] private Vector3 rearSensorOriginOffset = new Vector3(0, 0.5f, -0.5f);
+
+        private float[] _frontDistances;
+        private float _rearDistance;
 
         internal float MaxSensorDist() => maxSensorDist;
 
         void Awake()
         {
-            _distances = new float[sensorCount];
+            _frontDistances = new float[sensorCount];
+            _rearDistance = maxSensorDist;
         }
 
         void Update()
@@ -36,49 +41,70 @@ namespace Vehicle
         }
 
         /// <summary>
-        /// Возвращает последнюю измеренную дистанцию для всех сенсоров.
+        /// Возвращает массив дистанций передних сенсоров.
         /// </summary>
-        public float[] GetDistances()
+        public float[] GetFrontDistances()
         {
-            return _distances;
+            return _frontDistances;
         }
 
         /// <summary>
-        /// Рэйкасты.
+        /// Возвращает дистанцию заднего сенсора.
         /// </summary>
+        public float GetRearDistance()
+        {
+            return _rearDistance;
+        }
+
         private void UpdateSensors()
         {
+            // --- FRONT SENSORS ---
             Vector3 origin = transform.TransformPoint(sensorOriginOffset);
-
-            // Центральная ось
             float half = spreadAngle * 0.5f;
 
             for (int i = 0; i < sensorCount; i++)
             {
                 // Нормализуем позицию сенсора от -1 до 1
                 float t = Mathf.Lerp(-1f, 1f, i / (float)(sensorCount - 1));
-
                 float angle = t * half;
 
-                // Поворачиваем forward на angle градусов
                 Quaternion rot = Quaternion.Euler(0, angle, 0);
                 Vector3 dir = rot * transform.forward;
 
-                if (Physics.Raycast(origin, dir, out RaycastHit hit, maxSensorDist))
+				bool hitted = Physics.Raycast(origin, dir, out RaycastHit hit, maxSensorDist);
+                if (hitted)
                 {
-                    _distances[i] = hit.distance;
+                    _frontDistances[i] = hit.distance;
                 }
                 else
                 {
-                    _distances[i] = maxSensorDist;
+                    _frontDistances[i] = maxSensorDist;
                 }
 
 #if UNITY_EDITOR
-                Debug.DrawRay(origin, dir * _distances[i], Color.green);
-                if (_distances[i] >= maxSensorDist - 0.01f)
-                    Debug.DrawRay(origin, dir * maxSensorDist, Color.gray);
+                // Рисуем передние лучи
+                Debug.DrawRay(origin, dir * _frontDistances[i], hitted ? Color.green : Color.aliceBlue);
 #endif
             }
+
+            // --- REAR SENSOR ---
+            Vector3 rearOrigin = transform.TransformPoint(rearSensorOriginOffset);
+            Vector3 rearDir = -transform.forward; // Строго назад
+
+			bool rearHitted = Physics.Raycast(rearOrigin, rearDir, out RaycastHit rearHit, maxSensorDist);
+            if (rearHitted)
+            {
+                _rearDistance = rearHit.distance;
+            }
+            else
+            {
+                _rearDistance = maxSensorDist;
+            }
+
+#if UNITY_EDITOR
+            // Рисуем задний луч (синий)
+            Debug.DrawRay(rearOrigin, rearDir * _rearDistance, rearHitted ? Color.blue : Color.aliceBlue);
+#endif
         }
     }
 }

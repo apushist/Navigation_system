@@ -56,5 +56,10 @@ namespace Vehicle
                 _rb.MoveRotation(_rb.rotation * turnOffset);
             }
         }
+
+		public float GetFrontSpeed()
+		{
+			return Vector3.Dot(_rb.linearVelocity, transform.forward);
+		}
     }
 }
