@@ -23,13 +23,31 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
+        - serializedVersion: 3
+          time: 0.1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.2
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 0.35
           value: 1
@@ -178,8 +196,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.1
-          value: 1
+          time: 0.15670928
+          value: 0.99806213
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -187,8 +205,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.2
-          value: 0
+          time: 0.27054137
+          value: 0.001953125
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -368,13 +386,31 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
+        - serializedVersion: 3
+          time: 0.1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.2
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 0.35
           value: 1
@@ -500,6 +536,49 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - Name: Very Close
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.14425811
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.23596497
+          value: 0.001953125
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -762,22 +841,13 @@ MonoBehaviour:
           time: 0
           value: 0
           inSlope: 0
-          outSlope: 0
-          tangentMode: 65
+          outSlope: Infinity
+          tangentMode: 97
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.45
-          value: 0
-          inSlope: -0
-          outSlope: 2.4866858
-          tangentMode: 5
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.55
+          time: 0.49
           value: 1
           inSlope: 0
           outSlope: 0
@@ -820,7 +890,7 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.51
+          time: 0.53
           value: 0
           inSlope: 0
           outSlope: 0
@@ -859,7 +929,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.15
+          time: 0.2
           value: 1
           inSlope: 0
           outSlope: 0
@@ -868,7 +938,7 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.35
+          time: 0.3
           value: 0
           inSlope: 0
           outSlope: 0
@@ -911,8 +981,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.15
-          value: 0
+          time: 0.17213003
+          value: 0.001937985
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -920,8 +990,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.25
-          value: 1
+          time: 0.27489626
+          value: 0.99224806
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -929,7 +999,16 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.5
+          time: 0.37772912
+          value: 0.99031067
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.46403873
           value: 0
           inSlope: 0
           outSlope: 0
@@ -965,6 +1044,15 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0.5
           value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.6
+          value: 1.0019379
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -1015,7 +1103,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.65
+          time: 0.75
           value: 0
           inSlope: 0
           outSlope: 0
@@ -1044,6 +1132,110 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
+    - Name: VSlow Front
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.6
+          value: 1.0019379
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.7
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - Name: VSlow Back
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.3
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.4
+          value: 1.0019379
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.5
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   RuleGroups:
   - GroupName: Front Sensor
     Rules:
@@ -1054,7 +1246,7 @@ MonoBehaviour:
       - VariableName: Speed
         SetName: Pos
       ConsequentSetName: FastFront
-      Weight: 1
+      Weight: 0.5
     - Name: Slowed
       Antecedents:
       - VariableName: MinDist
@@ -1062,23 +1254,29 @@ MonoBehaviour:
       - VariableName: Speed
         SetName: Pos
       ConsequentSetName: SlowFront
-      Weight: 1
+      Weight: 0.5
     - Name: Slowed
       Antecedents:
       - VariableName: MinDist
         SetName: Close
       - VariableName: Speed
         SetName: Pos
-      ConsequentSetName: SlowFront
-      Weight: 1
+      ConsequentSetName: VSlow Front
+      Weight: 0.5
     - Name: Backward
       Antecedents:
       - VariableName: FrontDist
         SetName: Vety Close
       - VariableName: Speed
         SetName: Pos
-      ConsequentSetName: FastBack
+      ConsequentSetName: SlowBack
       Weight: 1
+    - Name: Backward
+      Antecedents:
+      - VariableName: Speed
+        SetName: Pos
+      ConsequentSetName: VSlow Front
+      Weight: 0.5
   - GroupName: Rear Sensor
     Rules:
     - Name: Far
@@ -1090,7 +1288,7 @@ MonoBehaviour:
       - VariableName: Speed
         SetName: Neg
       ConsequentSetName: FastBack
-      Weight: 2
+      Weight: 1
     - Name: Medium
       Antecedents:
       - VariableName: RearDist
@@ -1100,7 +1298,7 @@ MonoBehaviour:
       - VariableName: Speed
         SetName: Neg
       ConsequentSetName: SlowBack
-      Weight: 2
+      Weight: 1
     - Name: Close
       Antecedents:
       - VariableName: RearDist
@@ -1109,5 +1307,15 @@ MonoBehaviour:
         SetName: On
       - VariableName: Speed
         SetName: Neg
+      ConsequentSetName: VSlow Back
+      Weight: 1
+    - Name: Close
+      Antecedents:
+      - VariableName: RearDist
+        SetName: Very Close
+      - VariableName: BackwardInput
+        SetName: On
+      - VariableName: Speed
+        SetName: Neg
       ConsequentSetName: FastFront
-      Weight: 2
+      Weight: 1

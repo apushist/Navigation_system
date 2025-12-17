@@ -199,7 +199,8 @@ namespace Vehicle.Control
                 { "RearDist", rearDistInput }, // Можно добавить логику инверсии руля при заднем ходе
                 { "Angle", signedAngle },
                 { "TargetDist", distanceToTarget },
-                { "TurningDamp", dampingInput } // Новая переменная для гистерезиса
+                { "TurningDamp", dampingInput }, // Новая переменная для гистерезиса
+				{ "Speed", speedInput }
             };
 
             float turnOut = turnFIS.Calculate(turnInputs);

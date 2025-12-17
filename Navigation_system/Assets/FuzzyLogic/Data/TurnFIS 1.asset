@@ -953,6 +953,78 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
+  - Name: Speed
+    Min: -1
+    Max: 1
+    Sets:
+    - Name: Neg
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: Infinity
+          tangentMode: 97
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - Name: Pos
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: Infinity
+          tangentMode: 97
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   OutputVariable:
     Name: Steering
     Min: -1
@@ -981,7 +1053,7 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.35
+          time: 0.25
           value: 0
           inSlope: 0
           outSlope: 0
@@ -1034,6 +1106,15 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 0.25
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.4
           value: 1
           inSlope: 0
           outSlope: 0
@@ -1137,6 +1218,15 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
+          time: 0.6
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 0.75
           value: 1
           inSlope: 0
@@ -1180,7 +1270,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.65
+          time: 0.75
           value: 0
           inSlope: 0
           outSlope: 0
@@ -1322,40 +1412,50 @@ MonoBehaviour:
         SetName: NegativeBig
       - VariableName: TurningDamp
         SetName: Low
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: HardLeft
-      Weight: 0.7
+      Weight: 0.2
     - Name: Left
       Antecedents:
       - VariableName: Angle
         SetName: NegativeSmall
       - VariableName: TurningDamp
         SetName: Low
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Left
-      Weight: 0.7
+      Weight: 0.2
     - Name: Front
       Antecedents:
       - VariableName: Angle
         SetName: Zero
       - VariableName: TurningDamp
         SetName: Low
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Center
-      Weight: 0.7
+      Weight: 0.2
     - Name: Right
       Antecedents:
       - VariableName: Angle
         SetName: PositiveSmall
       - VariableName: TurningDamp
         SetName: Low
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Right
-      Weight: 0.7
+      Weight: 0.2
     - Name: HardRight
       Antecedents:
       - VariableName: Angle
         SetName: PositiveBig
       - VariableName: TurningDamp
         SetName: Low
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: HardRight
-      Weight: 0.7
+      Weight: 0.2
   - GroupName: Obstacle Avoidance
     Rules:
     - Name: Left Wall
@@ -1363,41 +1463,41 @@ MonoBehaviour:
       - VariableName: LeftDist
         SetName: Close
       ConsequentSetName: HardRight
-      Weight: 1.5
+      Weight: 1
     - Name: Right Wall
       Antecedents:
       - VariableName: RightDist
         SetName: Close
       ConsequentSetName: HardLeft
-      Weight: 1.5
+      Weight: 1
     - Name: Front Wall Right Far
       Antecedents:
       - VariableName: FrontDist
         SetName: Close
       - VariableName: RightDist
         SetName: Far
-      ConsequentSetName: HardRight
-      Weight: 1.5
+      ConsequentSetName: Right
+      Weight: 1
     - Name: Front Wall Left Far
       Antecedents:
       - VariableName: FrontDist
         SetName: Close
       - VariableName: LeftDist
         SetName: Far
-      ConsequentSetName: HardLeft
-      Weight: 1.5
+      ConsequentSetName: Left
+      Weight: 1
     - Name: Left Medium
       Antecedents:
       - VariableName: LeftDist
         SetName: Medium
       ConsequentSetName: Right
-      Weight: 1.5
+      Weight: 1
     - Name: Right Medium
       Antecedents:
       - VariableName: RightDist
         SetName: Medium
       ConsequentSetName: Left
-      Weight: 1.5
+      Weight: 1
     - Name: Front Wall Right Far
       Antecedents:
       - VariableName: FrontDist
@@ -1405,7 +1505,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: Far
       ConsequentSetName: HardRight
-      Weight: 1.5
+      Weight: 1
     - Name: Front Wall LEft Far
       Antecedents:
       - VariableName: FrontDist
@@ -1413,23 +1513,7 @@ MonoBehaviour:
       - VariableName: LeftDist
         SetName: Far
       ConsequentSetName: HardLeft
-      Weight: 1.5
-    - Name: Front Wall LEft Far
-      Antecedents:
-      - VariableName: FrontDist
-        SetName: Close
-      - VariableName: RightDist
-        SetName: Close
-      ConsequentSetName: HardLeft
-      Weight: 2
-    - Name: Front Wall LEft Far
-      Antecedents:
-      - VariableName: FrontDist
-        SetName: Close
-      - VariableName: LeftDist
-        SetName: Close
-      ConsequentSetName: HardRight
-      Weight: 2
+      Weight: 1
   - GroupName: Dumped
     Rules:
     - Name: Hard Left
@@ -1438,38 +1522,48 @@ MonoBehaviour:
         SetName: NegativeBig
       - VariableName: TurningDamp
         SetName: High
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: SLeft
-      Weight: 1
+      Weight: 0.4
     - Name: Left Wall
       Antecedents:
       - VariableName: Angle
         SetName: NegativeBig
       - VariableName: TurningDamp
         SetName: High
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Left
-      Weight: 1
+      Weight: 0.4
     - Name: Left Wall
       Antecedents:
       - VariableName: Angle
         SetName: PositiveSmall
       - VariableName: TurningDamp
         SetName: High
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: SRight
-      Weight: 1
+      Weight: 0.4
     - Name: Left Wall
       Antecedents:
       - VariableName: Angle
         SetName: PositiveBig
       - VariableName: TurningDamp
         SetName: High
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Right
-      Weight: 1
+      Weight: 0.4
     - Name: Left Wall
       Antecedents:
       - VariableName: TurningDamp
         SetName: High
+      - VariableName: Speed
+        SetName: Pos
       ConsequentSetName: Center
-      Weight: 2
+      Weight: 0.4
   - GroupName: Front blocked
     Rules:
     - Name: Right
@@ -1479,7 +1573,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: Medium
       ConsequentSetName: HardLeft
-      Weight: 1.5
+      Weight: 1
     - Name: Left
       Antecedents:
       - VariableName: FrontDist
@@ -1487,7 +1581,7 @@ MonoBehaviour:
       - VariableName: LeftDist
         SetName: Medium
       ConsequentSetName: HardRight
-      Weight: 1.5
+      Weight: 1
     - Name: Right
       Antecedents:
       - VariableName: FrontDist
@@ -1495,7 +1589,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: Medium
       ConsequentSetName: HardLeft
-      Weight: 1.5
+      Weight: 1
     - Name: Left
       Antecedents:
       - VariableName: FrontDist
@@ -1503,7 +1597,7 @@ MonoBehaviour:
       - VariableName: LeftDist
         SetName: Medium
       ConsequentSetName: HardRight
-      Weight: 1.5
+      Weight: 1
     - Name: Right
       Antecedents:
       - VariableName: FrontDist
@@ -1511,7 +1605,7 @@ MonoBehaviour:
       - VariableName: RightDist
         SetName: Close
       ConsequentSetName: HardLeft
-      Weight: 1.5
+      Weight: 1
     - Name: Left
       Antecedents:
       - VariableName: FrontDist
@@ -1519,4 +1613,4 @@ MonoBehaviour:
       - VariableName: LeftDist
         SetName: Close
       ConsequentSetName: HardRight
-      Weight: 1.5
+      Weight: 1
