@@ -1025,6 +1025,44 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
+  - Name: TargetDist
+    Min: 0
+    Max: 40
+    Sets:
+    - Name: Close
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.25
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
   OutputVariable:
     Name: Steering
     Min: -1
@@ -1611,6 +1649,40 @@ MonoBehaviour:
       - VariableName: FrontDist
         SetName: Close
       - VariableName: LeftDist
+        SetName: Close
+      ConsequentSetName: HardRight
+      Weight: 1
+  - GroupName: Target Close
+    Rules:
+    - Name: Right
+      Antecedents:
+      - VariableName: Angle
+        SetName: PositiveSmall
+      - VariableName: TargetDist
+        SetName: Close
+      ConsequentSetName: Right
+      Weight: 1
+    - Name: Left
+      Antecedents:
+      - VariableName: Angle
+        SetName: NegativeSmall
+      - VariableName: TargetDist
+        SetName: Close
+      ConsequentSetName: Left
+      Weight: 1
+    - Name: Left Hard
+      Antecedents:
+      - VariableName: Angle
+        SetName: NegativeBig
+      - VariableName: TargetDist
+        SetName: Close
+      ConsequentSetName: HardLeft
+      Weight: 1
+    - Name: Right Hard
+      Antecedents:
+      - VariableName: Angle
+        SetName: PositiveBig
+      - VariableName: TargetDist
         SetName: Close
       ConsequentSetName: HardRight
       Weight: 1

@@ -189,6 +189,10 @@ namespace Vehicle.Control
 
             float speedOut = speedFIS.Calculate(speedInputs);
             float throttle = speedOut;
+			if (Mathf.Abs(throttle) < 0.1f)
+			{
+				throttle = 0.5f;
+			}
 
             // --- Turn FIS ---
             var turnInputs = new Dictionary<string, float>()
