@@ -15,6 +15,8 @@ namespace Vehicle
 
 		void Start()
 		{
+			menuPanel.SetActive(true);
+
 			_carMovementController = car.GetComponentInChildren<CarMovementController>();
 			_initialCarPosition = car.transform.position;
 		}
