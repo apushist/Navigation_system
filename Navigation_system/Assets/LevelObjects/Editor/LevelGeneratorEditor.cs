@@ -32,6 +32,27 @@ namespace LevelObjects.Editor
 			{
 				LevelPainterWindow.Open(generator);
 			}
+
+			GUILayout.Space(10);
+			EditorGUILayout.LabelField("Save/Load Layout", EditorStyles.boldLabel);
+
+			generator.layoutName = EditorGUILayout.TextField("Layout Name", generator.layoutName);
+
+			EditorGUILayout.BeginHorizontal();
+			if (GUILayout.Button("Save Layout"))
+			{
+				generator.SaveLayout();
+			}
+
+			if (GUILayout.Button("Load Layout"))
+			{
+				if (UnityEditor.EditorUtility.DisplayDialog("Load Layout",
+					"This will replace current obstacles. Continue?", "Yes", "No"))
+				{
+					generator.LoadLayout();
+				}
+			}
+			EditorGUILayout.EndHorizontal();
 		}
 	}
 }

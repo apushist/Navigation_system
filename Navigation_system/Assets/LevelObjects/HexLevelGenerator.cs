@@ -24,6 +24,10 @@ namespace LevelObjects
 		public Transform carTransform;
 		public Transform targetTransform;
 
+		[Header("Save/Load")]
+		public string layoutName = "MyLayout";
+		private List<Vector2Int> _paintedPositions = new List<Vector2Int>();
+
 		[SerializeField] // Чтобы Unity не теряла список при перезагрузках скриптов, но поле остается приватным
 		private List<GameObject> _spawnedHexes = new List<GameObject>();
 
@@ -327,5 +331,148 @@ namespace LevelObjects
 			if (!combiner) return;
 			combiner.CombineMeshes(true);
 		}
-    }
+
+		//=== Методы для Save/Load System
+
+		public void SaveLayout()
+		{
+			// Собираем все позиции (кроме стен)
+			List<Vector2IntSerializable> positions = new List<Vector2IntSerializable>();
+
+			foreach (GameObject obj in _spawnedHexes)
+			{
+				if (obj == null) continue;
+
+				// Находим позицию в сетке
+				Vector2Int gridPos = GetClosestGridCoordinate(obj.transform.position);
+				if (gridPos.x == -1) continue;
+
+				// Пропускаем стены
+				if (gridPos.x == 0 || gridPos.x == gridWidth - 1 ||
+					gridPos.y == 0 || gridPos.y == gridHeight - 1)
+					continue;
+
+				positions.Add(new Vector2IntSerializable(gridPos.x, gridPos.y));
+			}
+
+			// Создаем и сохраняем
+			LevelLayout layout = new LevelLayout
+			{
+				obstaclePositions = positions.ToArray(),
+				carPosition = carTransform ? new Vector3Serializable(
+					carTransform.position.x,
+					carTransform.position.y,
+					carTransform.position.z) : new Vector3Serializable(0, 0, 0),
+				carRotation = carTransform ? new Vector4Serializable(
+					carTransform.rotation.x,
+					carTransform.rotation.y,
+					carTransform.rotation.z,
+					carTransform.rotation.w) : new Vector4Serializable(0, 0, 0, 1),
+				targetPosition = targetTransform ? new Vector3Serializable(
+					targetTransform.position.x,
+					targetTransform.position.y,
+					targetTransform.position.z) : new Vector3Serializable(0, 0, 0)
+			};
+
+			string json = JsonUtility.ToJson(layout, true);
+			string folderPath = Application.dataPath + "/LevelObjects/LevelLayouts/";
+
+			if (!System.IO.Directory.Exists(folderPath))
+				System.IO.Directory.CreateDirectory(folderPath);
+
+			string filePath = folderPath + layoutName + ".json";
+			System.IO.File.WriteAllText(filePath, json);
+
+			Debug.Log($"Saved layout: {filePath} ({positions.Count} obstacles)" +
+			  (carTransform ? $", Car: {carTransform.position}" : "") +
+			  (targetTransform ? $", Target: {targetTransform.position}" : ""));
+		}
+
+		// Загрузить сохраненный уровень
+		public void LoadLayout()
+		{
+			string filePath = Application.dataPath + "/LevelObjects/LevelLayouts/" + layoutName + ".json";
+
+			if (!System.IO.File.Exists(filePath))
+			{
+				Debug.LogWarning($"Layout not found: {filePath}");
+				return;
+			}
+
+			string json = System.IO.File.ReadAllText(filePath);
+			LevelLayout layout = JsonUtility.FromJson<LevelLayout>(json);
+
+			// Сначала генерируем базовый уровень (со стенами)
+			Generate();
+
+			// Удаляем ВСЕ внутренние препятствия (оставляя только стены)
+			for (int i = _spawnedHexes.Count - 1; i >= 0; i--)
+			{
+				GameObject obj = _spawnedHexes[i];
+				if (obj == null) continue;
+
+				Vector2Int gridPos = GetClosestGridCoordinate(obj.transform.position);
+				if (gridPos.x == -1) continue;
+
+				// Если НЕ стена - удаляем
+				if (!(gridPos.x == 0 || gridPos.x == gridWidth - 1 ||
+					  gridPos.y == 0 || gridPos.y == gridHeight - 1))
+				{
+					_spawnedHexes.RemoveAt(i);
+					DestroyImmediate(obj);
+				}
+			}
+
+			// Добавляем сохраненные препятствия
+			foreach (var pos in layout.obstaclePositions)
+			{
+				Vector2Int gridPos = new Vector2Int(pos.x, pos.y);
+				Vector3 worldPos = GetWorldPositionFromGrid(gridPos);
+
+				// Проверяем безопасную зону
+				if (!IsSafeZone(worldPos))
+				{
+					CreateHexPrism(worldPos, obstaclePrefab);
+				}
+			}
+
+			if (carTransform)
+			{
+				carTransform.position = layout.carPosition;
+				carTransform.rotation = layout.carRotation;
+
+				// Сбрасываем физику машины
+				if (carTransform.TryGetComponent<Rigidbody>(out var rb))
+				{
+					rb.linearVelocity = Vector3.zero;
+					rb.angularVelocity = Vector3.zero;
+				}
+
+
+			}
+
+			if (targetTransform)
+			{
+				targetTransform.position = layout.targetPosition;
+			}
+
+			Debug.Log($"Loaded layout: {layoutName} ({layout.obstaclePositions.Length} obstacles)" +
+					  (carTransform ? $", Car: {carTransform.position}" : "") +
+					  (targetTransform ? $", Target: {targetTransform.position}" : ""));
+		}
+
+		// Вспомогательный метод для конвертации
+		private Vector3 GetWorldPositionFromGrid(Vector2Int gridPos)
+		{
+			float xOffset = Mathf.Sqrt(3) * hexRadius + gap;
+			float zOffset = 1.5f * hexRadius + gap;
+			float mapWidth = gridWidth * xOffset;
+			float mapHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapWidth / 2f, 0, -mapHeight / 2f);
+
+			return CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+		}
+
+
+	}
 }
