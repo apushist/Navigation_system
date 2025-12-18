@@ -61,7 +61,9 @@ namespace Vehicle.Control
 
             speedFIS = BuildFisFromAsset(speedFisAsset);
             turnFIS = BuildFisFromAsset(turnFisAsset);
-        }
+
+			_backwardTimer = maxBackwardTime;
+		}
 
         void FixedUpdate()
 		{

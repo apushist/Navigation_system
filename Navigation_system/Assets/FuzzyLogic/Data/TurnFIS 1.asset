@@ -1601,7 +1601,7 @@ MonoBehaviour:
       - VariableName: Speed
         SetName: Pos
       ConsequentSetName: Center
-      Weight: 0.4
+      Weight: 0.7
   - GroupName: Front blocked
     Rules:
     - Name: Right
@@ -1685,4 +1685,44 @@ MonoBehaviour:
       - VariableName: TargetDist
         SetName: Close
       ConsequentSetName: HardRight
+      Weight: 1
+  - GroupName: Target Close
+    Rules:
+    - Name: Neg Speed
+      Antecedents:
+      - VariableName: Speed
+        SetName: Neg
+      - VariableName: Angle
+        SetName: PositiveSmall
+      ConsequentSetName: SLeft
+      Weight: 0.2
+    - Name: Neg Speed
+      Antecedents:
+      - VariableName: Speed
+        SetName: Neg
+      - VariableName: Angle
+        SetName: PositiveBig
+      ConsequentSetName: Left
+      Weight: 0.2
+    - Name: Neg Speed
+      Antecedents:
+      - VariableName: Speed
+        SetName: Neg
+      - VariableName: Angle
+        SetName: NegativeSmall
+      ConsequentSetName: SRight
+      Weight: 0.2
+    - Name: Neg Speed
+      Antecedents:
+      - VariableName: Speed
+        SetName: Neg
+      - VariableName: Angle
+        SetName: NegativeBig
+      ConsequentSetName: Right
+      Weight: 0.2
+    - Name: Neg Speed
+      Antecedents:
+      - VariableName: Speed
+        SetName: Neg
+      ConsequentSetName: Left
       Weight: 1
