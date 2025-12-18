@@ -8,15 +8,18 @@ namespace Vehicle
 	{
 		[SerializeField] private GameObject car;
 		[SerializeField] private GameObject menuPanel;
+		[SerializeField] private GameObject endPanel;
 
 		private CarMovementController _carMovementController;
+		private Vector3 _initialCarPosition;
 
 		void Start()
 		{
 			_carMovementController = car.GetComponentInChildren<CarMovementController>();
+			_initialCarPosition = car.transform.position;
 		}
 
-		public void StartSystem()
+		public void _StartSystem()
 		{
 			menuPanel.SetActive(false);
 			StartCoroutine(WaitALittle());
@@ -28,6 +31,13 @@ namespace Vehicle
 		{
 			yield return new WaitForSeconds(0.05f);
 
+		}
+
+		public void _BackToStart()
+		{
+			car.transform.position = _initialCarPosition;
+			menuPanel.SetActive(true);
+			endPanel.SetActive(false);
 		}
 	}
 }
