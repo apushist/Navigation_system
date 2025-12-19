@@ -334,8 +334,12 @@ namespace LevelObjects
 
 		//=== Методы для Save/Load System
 
-		public void SaveLayout()
+		public void SaveLayout(string lName = "")
 		{
+			if (lName == "")
+			{
+				lName = layoutName;
+			}
 			// Собираем все позиции (кроме стен)
 			List<Vector2IntSerializable> positions = new List<Vector2IntSerializable>();
 
@@ -380,7 +384,7 @@ namespace LevelObjects
 			if (!System.IO.Directory.Exists(folderPath))
 				System.IO.Directory.CreateDirectory(folderPath);
 
-			string filePath = folderPath + layoutName + ".json";
+			string filePath = folderPath + lName + ".json";
 			System.IO.File.WriteAllText(filePath, json);
 
 			Debug.Log($"Saved layout: {filePath} ({positions.Count} obstacles)" +
@@ -389,9 +393,13 @@ namespace LevelObjects
 		}
 
 		// Загрузить сохраненный уровень
-		public void LoadLayout()
+		public void LoadLayout(string lName = "")
 		{
-			string filePath = Application.dataPath + "/LevelObjects/LevelLayouts/" + layoutName + ".json";
+			if(lName == "")
+			{
+				lName = layoutName;
+			}
+			string filePath = Application.dataPath + "/LevelObjects/LevelLayouts/" + lName + ".json";
 
 			if (!System.IO.File.Exists(filePath))
 			{
