@@ -54,7 +54,7 @@ namespace Vehicle
 
 					break;
 				case 2:
-					levelGenerator.LoadLayout("Level2");
+					levelGenerator.LoadLayout("Level45");
 
 					break;
 				case 3:
@@ -128,7 +128,20 @@ namespace Vehicle
 #endif
 		}
 
-		
+		public void _Times1()
+		{
+			Time.timeScale = 1f;
 
+		}
+
+		public void _Times2()
+		{
+			Time.timeScale = 2f;
+		}
+
+		public void _Times5()
+		{
+			Time.timeScale = 5f;
+		}
 	}
 }
