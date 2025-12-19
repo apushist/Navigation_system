@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using TMPro;
+using System.Collections.Generic;
+using LevelObjects;
 
 namespace Vehicle
 {
@@ -9,6 +12,9 @@ namespace Vehicle
 		[SerializeField] private GameObject car;
 		[SerializeField] private GameObject menuPanel;
 		[SerializeField] private GameObject endPanel;
+		[SerializeField] private TMP_Dropdown levelDropdown;
+		[SerializeField] private HexLevelGenerator levelGenerator;
+
 
 		private CarMovementController _carMovementController;
 		private Vector3 _initialCarPosition;
@@ -27,6 +33,34 @@ namespace Vehicle
 			_inputActions = new PlayerInputActions();
 			_inputActions.UI.Enable();
 			_inputActions.UI.Pause.performed += ctx => TogglePause();
+
+			levelDropdown.ClearOptions();
+
+			List<string> options = new List<string> { "Без препятствий", "Пример 1", "Пример 2", "Подкова" };
+			levelDropdown.AddOptions(options);
+			levelDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+		}
+
+		private void OnDropdownValueChanged(int index)
+		{
+			switch (index)
+			{
+				case 0:
+					
+					levelGenerator.LoadLayout("Empty");
+					break;
+				case 1:
+					levelGenerator.LoadLayout("Level1");
+
+					break;
+				case 2:
+					levelGenerator.LoadLayout("Level2");
+
+					break;
+				case 3:
+					levelGenerator.LoadLayout("Horseshoe");
+					break;
+			}
 		}
 
 		void OnDestroy()
@@ -94,6 +128,7 @@ namespace Vehicle
 #endif
 		}
 
+		
 
 	}
 }

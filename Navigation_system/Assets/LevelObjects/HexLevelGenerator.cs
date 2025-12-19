@@ -61,36 +61,49 @@ namespace LevelObjects
 			Vector3 startPos = new Vector3(-mapPixelWidth / 2f, 0, -mapPixelHeight / 2f);
 			PlaceCarAndTarget(startPos, mapPixelWidth, mapPixelHeight);
 
+			GenerateWalls(startPos, xOffset, zOffset);
+
+			for (int x = 1; x < gridWidth - 1; x++)
+			{
+				for (int z = 1; z < gridHeight - 1; z++)
+				{
+					Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
+
+					float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
+
+					if (noiseVal > (1f - fillThreshold))
+					{
+						if (!IsSafeZone(worldPos))
+						{
+							CreateHexPrism(worldPos, GetRandomObstaclePrefab());
+						}
+					}
+				}
+			}
+
+			Combine();
+		}
+
+		/// <summary>
+		/// Генерирует стены по периметру игрового поля
+		/// </summary>
+		private void GenerateWalls(Vector3 startPos, float xOffset, float zOffset)
+		{
 			for (int x = 0; x < gridWidth; x++)
 			{
 				for (int z = 0; z < gridHeight; z++)
 				{
 					bool isBorder = (x == 0 || x == gridWidth - 1 || z == 0 || z == gridHeight - 1);
-					
-					Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
 
 					if (isBorder)
 					{
-						// Если это граница, спауним стену (используем wallPrefab, если он есть, иначе obstaclePrefab)
+						Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
+
 						GameObject prefabToUse = wallPrefab != null ? wallPrefab : GetRandomObstaclePrefab();
 						CreateHexPrism(worldPos, prefabToUse);
 					}
-					else
-					{
-						// Логика для внутренней части (препятствия)
-						float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
-
-						if (noiseVal > (1f - fillThreshold))
-						{
-							if (!IsSafeZone(worldPos))
-							{
-								CreateHexPrism(worldPos, GetRandomObstaclePrefab());
-							}
-						}
-					}
 				}
 			}
-			Combine();
 		}
 
 		private Vector3 CalculateWorldPosition(int x, int z, Vector3 startPos, float xOffset, float zOffset)
@@ -137,7 +150,6 @@ namespace LevelObjects
 
 		public void Clear()
 		{
-			// Удаляем объекты из списка _spawnedHexes
 			for (int i = _spawnedHexes.Count - 1; i >= 0; i--)
 			{
 				var obj = _spawnedHexes[i];
@@ -395,7 +407,8 @@ namespace LevelObjects
 		// Загрузить сохраненный уровень
 		public void LoadLayout(string lName = "")
 		{
-			if(lName == "")
+			Clear();
+			if (lName == "")
 			{
 				lName = layoutName;
 			}
@@ -410,46 +423,11 @@ namespace LevelObjects
 			string json = System.IO.File.ReadAllText(filePath);
 			LevelLayout layout = JsonUtility.FromJson<LevelLayout>(json);
 
-			// Сначала генерируем базовый уровень (со стенами)
-			Generate();
-
-			// Удаляем ВСЕ внутренние препятствия (оставляя только стены)
-			for (int i = _spawnedHexes.Count - 1; i >= 0; i--)
-			{
-				GameObject obj = _spawnedHexes[i];
-				if (obj == null) continue;
-
-				Vector2Int gridPos = GetClosestGridCoordinate(obj.transform.position);
-				if (gridPos.x == -1) continue;
-
-				// Если НЕ стена - удаляем
-				if (!(gridPos.x == 0 || gridPos.x == gridWidth - 1 ||
-					  gridPos.y == 0 || gridPos.y == gridHeight - 1))
-				{
-					_spawnedHexes.RemoveAt(i);
-					DestroyImmediate(obj);
-				}
-			}
-
-			// Добавляем сохраненные препятствия
-			foreach (var pos in layout.obstaclePositions)
-			{
-				Vector2Int gridPos = new Vector2Int(pos.x, pos.y);
-				Vector3 worldPos = GetWorldPositionFromGrid(gridPos);
-
-				// Проверяем безопасную зону
-				if (!IsSafeZone(worldPos))
-				{
-					CreateHexPrism(worldPos, obstaclePrefab);
-				}
-			}
-
 			if (carTransform)
 			{
 				carTransform.position = layout.carPosition;
 				carTransform.rotation = layout.carRotation;
 
-				// Сбрасываем физику машины
 				if (carTransform.TryGetComponent<Rigidbody>(out var rb))
 				{
 					rb.linearVelocity = Vector3.zero;
@@ -463,6 +441,27 @@ namespace LevelObjects
 			{
 				targetTransform.position = layout.targetPosition;
 			}
+
+			float r = hexRadius;
+			float xOffset = Mathf.Sqrt(3) * r + gap;
+			float zOffset = 1.5f * r + gap;
+			float mapWidth = gridWidth * xOffset;
+			float mapHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapWidth / 2f, 0, -mapHeight / 2f);
+
+			GenerateWalls(startPos, xOffset, zOffset);
+
+			foreach (var pos in layout.obstaclePositions)
+			{
+				Vector2Int gridPos = new Vector2Int(pos.x, pos.y);
+				Vector3 worldPos = CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+
+				if (!IsSafeZone(worldPos))
+				{
+					CreateHexPrism(worldPos, GetRandomObstaclePrefab());
+				}
+			}
+
 
 			Debug.Log($"Loaded layout: {layoutName} ({layout.obstaclePositions.Length} obstacles)" +
 					  (carTransform ? $", Car: {carTransform.position}" : "") +
