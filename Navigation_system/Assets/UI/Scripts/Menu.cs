@@ -19,6 +19,7 @@ namespace Vehicle
 		private CarMovementController _carMovementController;
 		private Vector3 _initialCarPosition;
 		private bool _isPaused = false;
+		private float _currentTimeSpeed = 1.0f;
 
 		private PlayerInputActions _inputActions;
 
@@ -82,7 +83,7 @@ namespace Vehicle
 
 		public void _ResumeGame()
 		{
-			Time.timeScale = 1f;
+			Time.timeScale = _currentTimeSpeed;
 			menuPanel.SetActive(false);
 			//endPanel.SetActive(false);
 			_isPaused = false;
@@ -98,7 +99,8 @@ namespace Vehicle
 
 		public void _StartSystem()
 		{
-			Time.timeScale = 1f;
+			Time.timeScale = _currentTimeSpeed;
+			car.transform.position = _initialCarPosition;
 
 			menuPanel.SetActive(false);
 			StartCoroutine(WaitALittle());
@@ -130,18 +132,29 @@ namespace Vehicle
 
 		public void _Times1()
 		{
-			Time.timeScale = 1f;
+			_currentTimeSpeed = 1f;
+			Time.timeScale = _currentTimeSpeed;
 
 		}
 
 		public void _Times2()
 		{
-			Time.timeScale = 2f;
+			_currentTimeSpeed = 2f;
+			Time.timeScale = _currentTimeSpeed;
 		}
 
 		public void _Times5()
 		{
-			Time.timeScale = 5f;
+			_currentTimeSpeed = 5f;
+			Time.timeScale = _currentTimeSpeed;
+		}
+
+		public void _EndScreen()
+		{
+			endPanel.SetActive(true);
+			menuPanel.SetActive(false);
+			_carMovementController.maxSpeed = 0f;
+
 		}
 	}
 }

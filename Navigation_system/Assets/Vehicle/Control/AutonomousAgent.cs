@@ -36,8 +36,11 @@ namespace Vehicle.Control
         public float hysteresisDuration = 2.0f;
 		public float maxBackwardTime = 3f;
 
-        // Внутренние переменные
-        private CarMovementController _motor;
+		[Header("UI References")]
+		public Menu gameMenu;
+
+		// Внутренние переменные
+		private CarMovementController _motor;
         private Rigidbody _rb;
         private FuzzyInferenceSystem speedFIS;
         private FuzzyInferenceSystem turnFIS;
@@ -220,7 +223,8 @@ namespace Vehicle.Control
             if (distanceToTarget <= arriveRadius)
             {
                 _motor.Move(0f, 0f);
-                return;
+                gameMenu._EndScreen();
+				return;
             }
 
             _motor.Move(throttle, steering);
