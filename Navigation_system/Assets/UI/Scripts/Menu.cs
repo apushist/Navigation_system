@@ -30,6 +30,7 @@ namespace Vehicle
 			_carMovementController = car.GetComponentInChildren<CarMovementController>();
 			_carMovementController.maxSpeed = 0f;
 			_initialCarPosition = car.transform.position;
+			Physics.SyncTransforms();
 
 			_inputActions = new PlayerInputActions();
 			_inputActions.UI.Enable();
@@ -37,7 +38,7 @@ namespace Vehicle
 
 			levelDropdown.ClearOptions();
 
-			List<string> options = new List<string> { "Без препятствий", "Пример 1", "Пример 2", "Подкова" };
+			List<string> options = new List<string> { "Р‘РµР· РїСЂРµРїСЏС‚СЃС‚РІРёР№", "РџСЂРёРјРµСЂ 1", "РџСЂРёРјРµСЂ 2", "РџРѕРґРєРѕРІР°" };
 			levelDropdown.AddOptions(options);
 			levelDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 		}
@@ -55,7 +56,7 @@ namespace Vehicle
 
 					break;
 				case 2:
-					levelGenerator.LoadLayout("Level45_2");
+					levelGenerator.LoadLayout("Level45");
 
 					break;
 				case 3:
@@ -84,6 +85,7 @@ namespace Vehicle
 		public void _ResumeGame()
 		{
 			Time.timeScale = _currentTimeSpeed;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 			menuPanel.SetActive(false);
 			//endPanel.SetActive(false);
 			_isPaused = false;
@@ -92,6 +94,7 @@ namespace Vehicle
 		public void _PauseGame()
 		{
 			Time.timeScale = 0f;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 			menuPanel.SetActive(true);
 			endPanel.SetActive(false);
 			_isPaused = true;
@@ -100,6 +103,7 @@ namespace Vehicle
 		public void _StartSystem()
 		{
 			Time.timeScale = _currentTimeSpeed;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 			//car.transform.position = _initialCarPosition;
 
 			menuPanel.SetActive(false);
@@ -117,8 +121,10 @@ namespace Vehicle
 		public void _BackToStart()
 		{
 			car.transform.position = _initialCarPosition;
-			menuPanel.SetActive(true);
+			Physics.SyncTransforms();
+			
 			endPanel.SetActive(false);
+			menuPanel.SetActive(true);
 		}
 
 		public void _QuitGame()
@@ -134,25 +140,28 @@ namespace Vehicle
 		{
 			_currentTimeSpeed = 1f;
 			Time.timeScale = _currentTimeSpeed;
-
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 		}
 
 		public void _Times2()
 		{
 			_currentTimeSpeed = 2f;
 			Time.timeScale = _currentTimeSpeed;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 		}
 
 		public void _Times5()
 		{
 			_currentTimeSpeed = 5f;
 			Time.timeScale = _currentTimeSpeed;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 		}
 
 		public void _Times10()
 		{
 			_currentTimeSpeed = 10f;
 			Time.timeScale = _currentTimeSpeed;
+			//Time.fixedDeltaTime = _currentTimeSpeed * 0.02f;
 		}
 
 		public void _EndScreen()

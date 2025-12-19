@@ -458,6 +458,8 @@ namespace LevelObjects
 
 			}
 
+			Physics.SyncTransforms();
+
 			if (targetTransform)
 			{
 				targetTransform.position = layout.targetPosition;

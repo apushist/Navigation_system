@@ -176,7 +176,7 @@ namespace Vehicle.Control
 			float averageDist = (frontDist + leftDist + rightDist) / 3f;
 			float backwardInput = 1f - _backwardTimer / maxBackwardTime;
 			float speedInput = Mathf.Clamp(speed, -1f, 1f);
-			Debug.Log(speedInput);
+			//Debug.Log(speedInput);
             
             // --- Speed FIS ---
             // Теперь можно добавить RearDist в логику скорости, если нужно (например, тормозить при движении назад)
