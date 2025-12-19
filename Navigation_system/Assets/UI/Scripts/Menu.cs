@@ -55,7 +55,7 @@ namespace Vehicle
 
 					break;
 				case 2:
-					levelGenerator.LoadLayout("Level45");
+					levelGenerator.LoadLayout("Level45_2");
 
 					break;
 				case 3:

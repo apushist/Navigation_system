@@ -202,7 +202,7 @@ namespace LevelObjects
 			if (IsOccupied(targetPos)) return;
 
 			// Создаем препятствие
-			CreateHexPrism(targetPos, obstaclePrefab);
+			CreateHexPrism(targetPos, GetRandomObstaclePrefab());
 		}
 
 		public void TryEraseObstacle(Vector3 hitPoint)
@@ -482,6 +482,8 @@ namespace LevelObjects
 					CreateHexPrism(worldPos, GetRandomObstaclePrefab());
 				}
 			}
+
+			Combine();//opti
 
 
 			Debug.Log($"Loaded layout: {layoutName} ({layout.obstaclePositions.Length} obstacles)" +
