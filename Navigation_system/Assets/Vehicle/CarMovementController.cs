@@ -6,7 +6,7 @@ namespace Vehicle
     public class CarMovementController : MonoBehaviour
     {
         [Header("Car Specs")]
-        [SerializeField] private float maxSpeed = 10f;
+        [SerializeField] public float maxSpeed = 10f;
         [SerializeField] private float maxSteerAngle = 35f;
         [SerializeField] private float wheelBase = 2f;
         [SerializeField] private float acceleration = 5f;

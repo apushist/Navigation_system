@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 namespace LevelObjects
 {
@@ -23,6 +24,10 @@ namespace LevelObjects
 		public GameObject wallPrefab;
 		public Transform carTransform;
 		public Transform targetTransform;
+
+		[Header("Save/Load")]
+		public string layoutName = "MyLayout";
+		private List<Vector2Int> _paintedPositions = new List<Vector2Int>();
 
 		[SerializeField] // Чтобы Unity не теряла список при перезагрузках скриптов, но поле остается приватным
 		private List<GameObject> _spawnedHexes = new List<GameObject>();
@@ -57,36 +62,49 @@ namespace LevelObjects
 			Vector3 startPos = new Vector3(-mapPixelWidth / 2f, 0, -mapPixelHeight / 2f);
 			PlaceCarAndTarget(startPos, mapPixelWidth, mapPixelHeight);
 
+			GenerateWalls(startPos, xOffset, zOffset);
+
+			for (int x = 1; x < gridWidth - 1; x++)
+			{
+				for (int z = 1; z < gridHeight - 1; z++)
+				{
+					Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
+
+					float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
+
+					if (noiseVal > (1f - fillThreshold))
+					{
+						if (!IsSafeZone(worldPos))
+						{
+							CreateHexPrism(worldPos, GetRandomObstaclePrefab());
+						}
+					}
+				}
+			}
+
+			Combine();
+		}
+
+		/// <summary>
+		/// Генерирует стены по периметру игрового поля
+		/// </summary>
+		private void GenerateWalls(Vector3 startPos, float xOffset, float zOffset)
+		{
 			for (int x = 0; x < gridWidth; x++)
 			{
 				for (int z = 0; z < gridHeight; z++)
 				{
 					bool isBorder = (x == 0 || x == gridWidth - 1 || z == 0 || z == gridHeight - 1);
-					
-					Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
 
 					if (isBorder)
 					{
-						// Если это граница, спауним стену (используем wallPrefab, если он есть, иначе obstaclePrefab)
+						Vector3 worldPos = CalculateWorldPosition(x, z, startPos, xOffset, zOffset);
+
 						GameObject prefabToUse = wallPrefab != null ? wallPrefab : GetRandomObstaclePrefab();
 						CreateHexPrism(worldPos, prefabToUse);
 					}
-					else
-					{
-						// Логика для внутренней части (препятствия)
-						float noiseVal = Mathf.PerlinNoise((x + seed) * noiseScale, (z + seed) * noiseScale);
-
-						if (noiseVal > (1f - fillThreshold))
-						{
-							if (!IsSafeZone(worldPos))
-							{
-								CreateHexPrism(worldPos, GetRandomObstaclePrefab());
-							}
-						}
-					}
 				}
 			}
-			Combine();
 		}
 
 		private Vector3 CalculateWorldPosition(int x, int z, Vector3 startPos, float xOffset, float zOffset)
@@ -133,7 +151,6 @@ namespace LevelObjects
 
 		public void Clear()
 		{
-			// Удаляем объекты из списка _spawnedHexes
 			for (int i = _spawnedHexes.Count - 1; i >= 0; i--)
 			{
 				var obj = _spawnedHexes[i];
@@ -327,5 +344,163 @@ namespace LevelObjects
 			if (!combiner) return;
 			combiner.CombineMeshes(true);
 		}
-    }
+
+		//=== Методы для Save/Load System
+
+		public void SaveLayout(string lName = "")
+		{
+			if (lName == "")
+			{
+				lName = layoutName;
+			}
+			// Собираем все позиции (кроме стен)
+			List<Vector2IntSerializable> positions = new List<Vector2IntSerializable>();
+
+			foreach (GameObject obj in _spawnedHexes)
+			{
+				if (obj == null) continue;
+
+				// Находим позицию в сетке
+				Vector2Int gridPos = GetClosestGridCoordinate(obj.transform.position);
+				if (gridPos.x == -1) continue;
+
+				// Пропускаем стены
+				if (gridPos.x == 0 || gridPos.x == gridWidth - 1 ||
+					gridPos.y == 0 || gridPos.y == gridHeight - 1)
+					continue;
+
+				positions.Add(new Vector2IntSerializable(gridPos.x, gridPos.y));
+			}
+
+			// Создаем и сохраняем
+			LevelLayout layout = new LevelLayout
+			{
+				obstaclePositions = positions.ToArray(),
+				carPosition = carTransform ? new Vector3Serializable(
+					carTransform.position.x,
+					carTransform.position.y,
+					carTransform.position.z) : new Vector3Serializable(0, 0, 0),
+				carRotation = carTransform ? new Vector4Serializable(
+					carTransform.rotation.x,
+					carTransform.rotation.y,
+					carTransform.rotation.z,
+					carTransform.rotation.w) : new Vector4Serializable(0, 0, 0, 1),
+				targetPosition = targetTransform ? new Vector3Serializable(
+					targetTransform.position.x,
+					targetTransform.position.y,
+					targetTransform.position.z) : new Vector3Serializable(0, 0, 0)
+			};
+
+			string json = JsonUtility.ToJson(layout, true);
+			string folderPath = Application.dataPath + "/LevelObjects/LevelLayouts/";
+
+			if (!System.IO.Directory.Exists(folderPath))
+				System.IO.Directory.CreateDirectory(folderPath);
+
+			string filePath = folderPath + lName + ".json";
+			System.IO.File.WriteAllText(filePath, json);
+
+			Debug.Log($"Saved layout: {filePath} ({positions.Count} obstacles)" +
+			  (carTransform ? $", Car: {carTransform.position}" : "") +
+			  (targetTransform ? $", Target: {targetTransform.position}" : ""));
+		}
+
+		private string GetLevelFilePath(string fileName)
+		{
+			string fileNameWithExt = fileName + ".json";
+
+			// Сначала проверяем в StreamingAssets (для билда)
+			string streamingAssetsPath = Path.Combine(Application.streamingAssetsPath, "LevelLayouts", fileNameWithExt);
+
+			// В редакторе используем старый путь для удобства
+#if UNITY_EDITOR
+			string editorPath = Application.dataPath + "/LevelObjects/LevelLayouts/" + fileNameWithExt;
+			if (File.Exists(editorPath))
+				return editorPath;
+#endif
+
+
+			return streamingAssetsPath;
+
+		}
+
+		// Загрузить сохраненный уровень
+		public void LoadLayout(string lName = "")
+		{
+			Clear();
+			if (lName == "")
+			{
+				lName = layoutName;
+			}
+
+			string filePath = GetLevelFilePath(lName);
+
+			if (!System.IO.File.Exists(filePath))
+			{
+				Debug.LogWarning($"Layout not found: {filePath}");
+				return;
+			}
+
+			string json = System.IO.File.ReadAllText(filePath);
+			LevelLayout layout = JsonUtility.FromJson<LevelLayout>(json);
+
+			if (carTransform)
+			{
+				carTransform.position = layout.carPosition;
+				carTransform.rotation = layout.carRotation;
+
+				if (carTransform.TryGetComponent<Rigidbody>(out var rb))
+				{
+					rb.linearVelocity = Vector3.zero;
+					rb.angularVelocity = Vector3.zero;
+				}
+
+
+			}
+
+			if (targetTransform)
+			{
+				targetTransform.position = layout.targetPosition;
+			}
+
+			float r = hexRadius;
+			float xOffset = Mathf.Sqrt(3) * r + gap;
+			float zOffset = 1.5f * r + gap;
+			float mapWidth = gridWidth * xOffset;
+			float mapHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapWidth / 2f, 0, -mapHeight / 2f);
+
+			GenerateWalls(startPos, xOffset, zOffset);
+
+			foreach (var pos in layout.obstaclePositions)
+			{
+				Vector2Int gridPos = new Vector2Int(pos.x, pos.y);
+				Vector3 worldPos = CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+
+				if (!IsSafeZone(worldPos))
+				{
+					CreateHexPrism(worldPos, GetRandomObstaclePrefab());
+				}
+			}
+
+
+			Debug.Log($"Loaded layout: {layoutName} ({layout.obstaclePositions.Length} obstacles)" +
+					  (carTransform ? $", Car: {carTransform.position}" : "") +
+					  (targetTransform ? $", Target: {targetTransform.position}" : ""));
+		}
+
+		// Вспомогательный метод для конвертации
+		private Vector3 GetWorldPositionFromGrid(Vector2Int gridPos)
+		{
+			float xOffset = Mathf.Sqrt(3) * hexRadius + gap;
+			float zOffset = 1.5f * hexRadius + gap;
+			float mapWidth = gridWidth * xOffset;
+			float mapHeight = gridHeight * zOffset;
+			Vector3 startPos = new Vector3(-mapWidth / 2f, 0, -mapHeight / 2f);
+
+			return CalculateWorldPosition(gridPos.x, gridPos.y, startPos, xOffset, zOffset);
+		}
+
+
+	}
 }
