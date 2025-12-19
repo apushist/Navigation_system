@@ -149,6 +149,12 @@ namespace Vehicle
 			Time.timeScale = _currentTimeSpeed;
 		}
 
+		public void _Times10()
+		{
+			_currentTimeSpeed = 10f;
+			Time.timeScale = _currentTimeSpeed;
+		}
+
 		public void _EndScreen()
 		{
 			endPanel.SetActive(true);
