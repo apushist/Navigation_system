@@ -100,7 +100,7 @@ namespace Vehicle
 		public void _StartSystem()
 		{
 			Time.timeScale = _currentTimeSpeed;
-			car.transform.position = _initialCarPosition;
+			//car.transform.position = _initialCarPosition;
 
 			menuPanel.SetActive(false);
 			StartCoroutine(WaitALittle());
