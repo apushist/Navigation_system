@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 namespace LevelObjects
 {
@@ -404,6 +405,25 @@ namespace LevelObjects
 			  (targetTransform ? $", Target: {targetTransform.position}" : ""));
 		}
 
+		private string GetLevelFilePath(string fileName)
+		{
+			string fileNameWithExt = fileName + ".json";
+
+			// Сначала проверяем в StreamingAssets (для билда)
+			string streamingAssetsPath = Path.Combine(Application.streamingAssetsPath, "LevelLayouts", fileNameWithExt);
+
+			// В редакторе используем старый путь для удобства
+#if UNITY_EDITOR
+			string editorPath = Application.dataPath + "/LevelObjects/LevelLayouts/" + fileNameWithExt;
+			if (File.Exists(editorPath))
+				return editorPath;
+#endif
+
+
+			return streamingAssetsPath;
+
+		}
+
 		// Загрузить сохраненный уровень
 		public void LoadLayout(string lName = "")
 		{
@@ -412,7 +432,8 @@ namespace LevelObjects
 			{
 				lName = layoutName;
 			}
-			string filePath = Application.dataPath + "/LevelObjects/LevelLayouts/" + lName + ".json";
+
+			string filePath = GetLevelFilePath(lName);
 
 			if (!System.IO.File.Exists(filePath))
 			{
